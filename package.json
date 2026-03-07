@@ -32,7 +32,6 @@
     "access": "public"
   },
   "peerDependencies": {
-    "react": ">=18",
     "react-dom": ">=18"
   },
   "devDependencies": {
