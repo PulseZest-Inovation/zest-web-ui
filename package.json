@@ -19,6 +19,18 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PulseZest-Inovation/zest-web-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PulseZest-Inovation/zest-web-ui/issues"
+  },
+  "homepage": "https://github.com/PulseZest-Inovation/zest-web-ui#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
@@ -27,5 +39,13 @@
     "@types/react": "^19.2.14",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    }
   }
 }
