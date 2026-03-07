@@ -35,6 +35,14 @@ interface ZestTitleProps {
 }
 declare function ZestTitle({ children, icon, className, as: Tag, }: ZestTitleProps): react_jsx_runtime.JSX.Element;
 
+interface ZestInputTitleProps {
+    htmlFor?: string;
+    children: React$1.ReactNode;
+    className?: string;
+    required?: boolean;
+}
+declare const ZestInputTitle: React$1.FC<ZestInputTitleProps>;
+
 interface ZestButtonProps extends React$1.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string;
     icon?: React$1.ReactNode;
@@ -146,4 +154,4 @@ interface ZestSpinProps {
 }
 declare const ZestSpin: React.FC<ZestSpinProps>;
 
-export { AlertProvider, ZestBadge, type ZestBadgeProps, ZestButton, type ZestButtonProps, ZestDivider, ZestFloatingButton, type ZestFloatingButtonProps, ZestHeading, type ZestHeadingProps, ZestIconButton, type ZestIconButtonProps, ZestInput, type ZestInputProps, ZestLabel, type ZestLabelProps, ZestLinkButton, type ZestLinkButtonProps, ZestModal, ZestModalBody, ZestModalFooter, ZestModalHeader, type ZestModalProps, ZestSelector, type ZestSelectorProps, ZestSpin, type ZestSpinProps, ZestTable, type ZestTableColumn, type ZestTableProps, ZestTabs, type ZestTabsProps, ZestText, type ZestTextProps, ZestTitle, type ZestTitleProps, ZestToggleButton, useAlert };
+export { AlertProvider, ZestBadge, type ZestBadgeProps, ZestButton, type ZestButtonProps, ZestDivider, ZestFloatingButton, type ZestFloatingButtonProps, ZestHeading, type ZestHeadingProps, ZestIconButton, type ZestIconButtonProps, ZestInput, type ZestInputProps, ZestInputTitle, type ZestInputTitleProps, ZestLabel, type ZestLabelProps, ZestLinkButton, type ZestLinkButtonProps, ZestModal, ZestModalBody, ZestModalFooter, ZestModalHeader, type ZestModalProps, ZestSelector, type ZestSelectorProps, ZestSpin, type ZestSpinProps, ZestTable, type ZestTableColumn, type ZestTableProps, ZestTabs, type ZestTabsProps, ZestText, type ZestTextProps, ZestTitle, type ZestTitleProps, ZestToggleButton, useAlert };
