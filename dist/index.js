@@ -40,8 +40,24 @@ function ZestText({ children, className = "" }) {
 {
 }
 
-// src/components/Button/ZestButton.tsx
+// src/components/Text/ZestTitle.tsx
 import { jsx as jsx5, jsxs } from "react/jsx-runtime";
+function ZestTitle({
+  children,
+  icon,
+  className = "",
+  as: Tag = "h2"
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: `flex items-center gap-2 mb-6 text-primary ${className}`, children: [
+    icon && /* @__PURE__ */ jsx5("span", { className: "flex items-center", children: icon }),
+    /* @__PURE__ */ jsx5(Tag, { className: "text-2xl font-bold", children })
+  ] });
+}
+{
+}
+
+// src/components/Button/ZestButton.tsx
+import { jsx as jsx6, jsxs as jsxs2 } from "react/jsx-runtime";
 function ZestButton({
   className = "",
   icon,
@@ -57,15 +73,15 @@ function ZestButton({
     ghost: "border-transparent text-blue-600",
     theme: "bg-primary text-primary border-primary"
   };
-  return /* @__PURE__ */ jsxs(
+  return /* @__PURE__ */ jsxs2(
     "button",
     {
       ...props,
       disabled: disabled || loading,
       className: `px-4 py-2 rounded-lg border-2 hover:scale-105 focus:outline-none cursor-pointer focus:ring-2 focus:ring-blue-400 transition-transform duration-200 flex items-center gap-2 ${variantStyles[variant]} ${className}`,
       children: [
-        loading && /* @__PURE__ */ jsx5("span", { className: "animate-spin", children: "\u23F3" }),
-        !loading && icon && /* @__PURE__ */ jsx5("span", { className: "flex items-center", children: icon }),
+        loading && /* @__PURE__ */ jsx6("span", { className: "animate-spin", children: "\u23F3" }),
+        !loading && icon && /* @__PURE__ */ jsx6("span", { className: "flex items-center", children: icon }),
         children
       ]
     }
@@ -75,9 +91,9 @@ function ZestButton({
 }
 
 // src/components/Button/ZestFloatingButton.tsx
-import { jsx as jsx6 } from "react/jsx-runtime";
+import { jsx as jsx7 } from "react/jsx-runtime";
 function ZestFloatingButton({ icon, onClick }) {
-  return /* @__PURE__ */ jsx6(
+  return /* @__PURE__ */ jsx7(
     "button",
     {
       onClick,
@@ -90,9 +106,9 @@ function ZestFloatingButton({ icon, onClick }) {
 }
 
 // src/components/Button/ZestIconButton.tsx
-import { jsx as jsx7 } from "react/jsx-runtime";
+import { jsx as jsx8 } from "react/jsx-runtime";
 function ZestIconButton({ icon, className = "", ...props }) {
-  return /* @__PURE__ */ jsx7(
+  return /* @__PURE__ */ jsx8(
     "button",
     {
       ...props,
@@ -105,9 +121,9 @@ function ZestIconButton({ icon, className = "", ...props }) {
 }
 
 // src/components/Button/ZestLinkButton.tsx
-import { jsx as jsx8 } from "react/jsx-runtime";
+import { jsx as jsx9 } from "react/jsx-runtime";
 function ZestLinkButton({ href, children, className = "", ...props }) {
-  return /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsx9(
     "a",
     {
       href,
@@ -122,10 +138,10 @@ function ZestLinkButton({ href, children, className = "", ...props }) {
 
 // src/components/Button/ZestToggleButton.tsx
 import React from "react";
-import { jsx as jsx9 } from "react/jsx-runtime";
+import { jsx as jsx10 } from "react/jsx-runtime";
 function ZestToggleButton({ children }) {
   const [active, setActive] = React.useState(false);
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx10(
     "button",
     {
       onClick: () => setActive(!active),
@@ -138,14 +154,14 @@ function ZestToggleButton({ children }) {
 }
 
 // src/components/Divider/ZestDivider.tsx
-import { jsx as jsx10 } from "react/jsx-runtime";
+import { jsx as jsx11 } from "react/jsx-runtime";
 function ZestDivider() {
-  return /* @__PURE__ */ jsx10("hr", { className: "border-gray-200 my-4" });
+  return /* @__PURE__ */ jsx11("hr", { className: "border-gray-200 my-4" });
 }
 
 // src/components/Alert/AlertProvider.tsx
 import React2 from "react";
-import { jsx as jsx11, jsxs as jsxs2 } from "react/jsx-runtime";
+import { jsx as jsx12, jsxs as jsxs3 } from "react/jsx-runtime";
 var AlertContext = React2.createContext(void 0);
 var DEFAULT_ALERT = {
   open: false,
@@ -171,9 +187,9 @@ var AlertProvider = ({ children }) => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
-  return /* @__PURE__ */ jsxs2(AlertContext.Provider, { value: { showAlert }, children: [
+  return /* @__PURE__ */ jsxs3(AlertContext.Provider, { value: { showAlert }, children: [
     children,
-    /* @__PURE__ */ jsx11(ZestAlertGlobal, { ...alert })
+    /* @__PURE__ */ jsx12(ZestAlertGlobal, { ...alert })
   ] });
 };
 function useAlert() {
@@ -189,7 +205,7 @@ var ZestAlertGlobal = ({ open, type, message, duration }) => {
     warning: "bg-yellow-100 text-yellow-700 border-yellow-400",
     info: "bg-blue-100 text-blue-700 border-blue-400"
   };
-  return /* @__PURE__ */ jsx11(
+  return /* @__PURE__ */ jsx12(
     "div",
     {
       className: `fixed top-24 left-1/2 -translate-x-1/2 z-50 max-w-md w-fit px-4 py-2 rounded-lg border-2 shadow-lg transition-all duration-300 ${typeStyles[type]}`,
@@ -200,13 +216,13 @@ var ZestAlertGlobal = ({ open, type, message, duration }) => {
 };
 
 // src/components/Input/ZestInput.tsx
-import { jsx as jsx12 } from "react/jsx-runtime";
+import { jsx as jsx13 } from "react/jsx-runtime";
 var ZestInput = ({
   containerClassName = "",
   className = "",
   ...props
 }) => {
-  return /* @__PURE__ */ jsx12(
+  return /* @__PURE__ */ jsx13(
     "input",
     {
       ...props,
@@ -218,19 +234,19 @@ var ZestInput = ({
 }
 
 // src/components/Selector/ZestSelector.tsx
-import { jsx as jsx13 } from "react/jsx-runtime";
-var ZestSelector = ({ options, containerClassName = "", ...props }) => /* @__PURE__ */ jsx13(
+import { jsx as jsx14 } from "react/jsx-runtime";
+var ZestSelector = ({ options, containerClassName = "", ...props }) => /* @__PURE__ */ jsx14(
   "select",
   {
     ...props,
     className: `px-3 py-1.5 border w-80 border-gray-300 rounded-lg text-primary bg-primary focus:outline-none focus:ring-2 focus:ring-blue-400 transition ${props.className || ""}`,
-    children: options.map((opt) => /* @__PURE__ */ jsx13("option", { value: opt.value, children: opt.label }, opt.value))
+    children: options.map((opt) => /* @__PURE__ */ jsx14("option", { value: opt.value, children: opt.label }, opt.value))
   }
 );
 
 // src/components/Modal/ZestModal.tsx
 import { useEffect } from "react";
-import { jsx as jsx14 } from "react/jsx-runtime";
+import { jsx as jsx15 } from "react/jsx-runtime";
 var sizeMap = {
   sm: "max-w-sm",
   md: "max-w-md",
@@ -267,12 +283,12 @@ var ZestModal = ({
   } else if (typeof size === "string") {
     style.width = size;
   }
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15(
     "div",
     {
       className: `fixed inset-0 z-50 flex items-center justify-center bg-black/40 ${overlayClassName}`,
       onClick: onClose,
-      children: /* @__PURE__ */ jsx14(
+      children: /* @__PURE__ */ jsx15(
         "div",
         {
           className: `bg-primary rounded-lg shadow-lg w-full ${widthClass} ${className}`,
@@ -290,37 +306,37 @@ var ZestModal = ({
 };
 
 // src/components/Modal/ZestModalBody.tsx
-import { jsx as jsx15 } from "react/jsx-runtime";
+import { jsx as jsx16 } from "react/jsx-runtime";
 var ZestModalBody = ({
   children,
   className = ""
 }) => {
-  return /* @__PURE__ */ jsx15("div", { className: `p-4 ${className}`, children });
+  return /* @__PURE__ */ jsx16("div", { className: `p-4 ${className}`, children });
 };
 
 // src/components/Modal/ZestModalFooter.tsx
-import { jsx as jsx16 } from "react/jsx-runtime";
+import { jsx as jsx17 } from "react/jsx-runtime";
 var ZestModalFooter = ({
   children,
   className = ""
 }) => {
-  return /* @__PURE__ */ jsx16("div", { className: `flex justify-end gap-2 p-4 border-t ${className}`, children });
+  return /* @__PURE__ */ jsx17("div", { className: `flex justify-end gap-2 p-4 border-t ${className}`, children });
 };
 
 // src/components/Modal/ZestModalHeader.tsx
-import { jsx as jsx17 } from "react/jsx-runtime";
+import { jsx as jsx18 } from "react/jsx-runtime";
 var ZestModalHeader = ({
   children,
   className = ""
 }) => {
-  return /* @__PURE__ */ jsx17("div", { className: `flex items-center justify-between p-4 border-b ${className}`, children });
+  return /* @__PURE__ */ jsx18("div", { className: `flex items-center justify-between p-4 border-b ${className}`, children });
 };
 
 // src/components/Table/ZestTable.tsx
-import { jsx as jsx18, jsxs as jsxs3 } from "react/jsx-runtime";
+import { jsx as jsx19, jsxs as jsxs4 } from "react/jsx-runtime";
 function ZestTable({ columns, data, className = "" }) {
-  return /* @__PURE__ */ jsx18("div", { className: `overflow-x-auto ${className}`, children: /* @__PURE__ */ jsxs3("table", { className: "min-w-full border border-gray-200 dark:border-zinc-700 rounded-lg", children: [
-    /* @__PURE__ */ jsx18("thead", { children: /* @__PURE__ */ jsx18("tr", { children: columns.map((col) => /* @__PURE__ */ jsx18(
+  return /* @__PURE__ */ jsx19("div", { className: `overflow-x-auto ${className}`, children: /* @__PURE__ */ jsxs4("table", { className: "min-w-full border border-gray-200 dark:border-zinc-700 rounded-lg", children: [
+    /* @__PURE__ */ jsx19("thead", { children: /* @__PURE__ */ jsx19("tr", { children: columns.map((col) => /* @__PURE__ */ jsx19(
       "th",
       {
         className: "px-4 py-2 text-left font-semibold border-b border-gray-200 dark:border-zinc-700 bg-blue-50 bg-primary text-primary dark:text-blue-100",
@@ -328,11 +344,11 @@ function ZestTable({ columns, data, className = "" }) {
       },
       col.key
     )) }) }),
-    /* @__PURE__ */ jsx18("tbody", { children: data.length === 0 ? /* @__PURE__ */ jsx18("tr", { children: /* @__PURE__ */ jsx18("td", { colSpan: columns.length, className: "px-4 py-4 text-center text-gray-400  bg-white dark:bg-zinc-900", children: "No data" }) }) : data.map((row, idx) => /* @__PURE__ */ jsx18(
+    /* @__PURE__ */ jsx19("tbody", { children: data.length === 0 ? /* @__PURE__ */ jsx19("tr", { children: /* @__PURE__ */ jsx19("td", { colSpan: columns.length, className: "px-4 py-4 text-center text-gray-400  bg-white dark:bg-zinc-900", children: "No data" }) }) : data.map((row, idx) => /* @__PURE__ */ jsx19(
       "tr",
       {
         className: idx % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-blue-50 dark:bg-zinc-800",
-        children: columns.map((col, colIdx) => /* @__PURE__ */ jsx18(
+        children: columns.map((col, colIdx) => /* @__PURE__ */ jsx19(
           "td",
           {
             className: `px-4 py-2 border-b border-gray-100 bg-primary text-primary ${colIdx === 0 ? "font-medium text-gray-900 dark:text-blue-100" : "text-gray-700 dark:text-blue-200"}`,
@@ -348,7 +364,7 @@ function ZestTable({ columns, data, className = "" }) {
 
 // src/components/Tabs/ZestTab.tsx
 import React4 from "react";
-import { jsx as jsx19, jsxs as jsxs4 } from "react/jsx-runtime";
+import { jsx as jsx20, jsxs as jsxs5 } from "react/jsx-runtime";
 var ZestTabs = ({ tabNames, children, className = "" }) => {
   const [active, setActive] = React4.useState(0);
   const [fade, setFade] = React4.useState(true);
@@ -357,8 +373,8 @@ var ZestTabs = ({ tabNames, children, className = "" }) => {
     const timeout = setTimeout(() => setFade(true), 10);
     return () => clearTimeout(timeout);
   }, [active]);
-  return /* @__PURE__ */ jsxs4("div", { className, children: [
-    /* @__PURE__ */ jsx19("div", { className: "flex border-b mb-4 ", children: tabNames.map((name, idx) => /* @__PURE__ */ jsx19(
+  return /* @__PURE__ */ jsxs5("div", { className, children: [
+    /* @__PURE__ */ jsx20("div", { className: "flex border-b mb-4 ", children: tabNames.map((name, idx) => /* @__PURE__ */ jsx20(
       "button",
       {
         className: `px-4 py-2 -mb-px border-b-2 cursor-pointer transition-colors duration-200 focus:outline-none ${active === idx ? "border-blue-500 text-blue-600 font-semibold" : "border-transparent text-gray-500 hover:text-blue-500"}`,
@@ -368,7 +384,7 @@ var ZestTabs = ({ tabNames, children, className = "" }) => {
       },
       name
     )) }),
-    /* @__PURE__ */ jsx19(
+    /* @__PURE__ */ jsx20(
       "div",
       {
         style: {
@@ -382,14 +398,14 @@ var ZestTabs = ({ tabNames, children, className = "" }) => {
 };
 
 // src/components/Spin/ZestSpin.tsx
-import { jsx as jsx20, jsxs as jsxs5 } from "react/jsx-runtime";
-var ZestSpin = ({ size = 24, color = "#2563eb", className = "" }) => /* @__PURE__ */ jsx20(
+import { jsx as jsx21, jsxs as jsxs6 } from "react/jsx-runtime";
+var ZestSpin = ({ size = 24, color = "#2563eb", className = "" }) => /* @__PURE__ */ jsx21(
   "span",
   {
     className: `inline-block animate-spin ${className}`,
     style: { width: size, height: size },
     "aria-label": "Loading",
-    children: /* @__PURE__ */ jsxs5(
+    children: /* @__PURE__ */ jsxs6(
       "svg",
       {
         width: size,
@@ -398,7 +414,7 @@ var ZestSpin = ({ size = 24, color = "#2563eb", className = "" }) => /* @__PURE_
         fill: "none",
         xmlns: "http://www.w3.org/2000/svg",
         children: [
-          /* @__PURE__ */ jsx20(
+          /* @__PURE__ */ jsx21(
             "circle",
             {
               cx: "25",
@@ -411,7 +427,7 @@ var ZestSpin = ({ size = 24, color = "#2563eb", className = "" }) => /* @__PURE_
               opacity: "0.3"
             }
           ),
-          /* @__PURE__ */ jsx20(
+          /* @__PURE__ */ jsx21(
             "circle",
             {
               cx: "25",
@@ -449,6 +465,7 @@ export {
   ZestTable,
   ZestTabs,
   ZestText,
+  ZestTitle,
   ZestToggleButton,
   useAlert
 };

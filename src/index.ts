@@ -3,6 +3,7 @@ export * from "./components/Text/ZestBadge";
 export * from "./components/Text/ZestHeading";
 export * from "./components/Text/ZestLabel";
 export * from "./components/Text/ZestText";
+export * from "./components/Text/ZestTitle";
 
 
 // -------------Button COMPONENTS----------------
