@@ -68,11 +68,13 @@ const ZestAlertGlobal: React.FC<AlertState> = ({ open, type, message, duration }
   };
   return (
     <div
-      role="alert"
-      aria-live="assertive"
-      tabIndex={0}
-      className={`fixed top-24 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-fit px-4 py-2 rounded-lg border-2 shadow-lg transition-all duration-300 ${typeStyles[type]}`}
-      style={{ pointerEvents: 'auto' }}
+      className={`fixed top-0 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-fit px-4 py-2 rounded-lg border-2 shadow-lg transition-all duration-300 ${typeStyles[type]}`}
+      style={{
+        pointerEvents: 'auto',
+        background: '#fffbe6', // fallback for visibility
+        color: '#222',
+        border: '2px solid #facc15'
+      }}
     >
       {message}
     </div>
