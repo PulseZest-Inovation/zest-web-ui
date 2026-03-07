@@ -1,14 +1,14 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
-import React from 'react';
+import React$1 from 'react';
 
 interface ZestBadgeProps {
-    children: React.ReactNode;
+    children: React$1.ReactNode;
     className?: string;
 }
 declare function ZestBadge({ children, className }: ZestBadgeProps): react_jsx_runtime.JSX.Element;
 
 interface ZestHeadingProps {
-    children: React.ReactNode;
+    children: React$1.ReactNode;
     level?: 1 | 2 | 3 | 4 | 5 | 6;
     className?: string;
 }
@@ -16,45 +16,126 @@ declare function ZestHeading({ children, level, className }: ZestHeadingProps): 
 
 interface ZestLabelProps {
     htmlFor?: string;
-    children: React.ReactNode;
+    children: React$1.ReactNode;
     className?: string;
 }
 declare function ZestLabel({ htmlFor, children, className }: ZestLabelProps): react_jsx_runtime.JSX.Element;
 
 interface ZestTextProps {
-    children: React.ReactNode;
+    children: React$1.ReactNode;
     className?: string;
 }
 declare function ZestText({ children, className }: ZestTextProps): react_jsx_runtime.JSX.Element;
 
-interface ZestButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ZestButtonProps extends React$1.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string;
-    icon?: React.ReactNode;
+    icon?: React$1.ReactNode;
     variant?: "primary" | "outline" | "ghost" | "theme";
     loading?: boolean;
 }
 declare function ZestButton({ className, icon, children, variant, loading, disabled, ...props }: ZestButtonProps): react_jsx_runtime.JSX.Element;
 
 interface ZestFloatingButtonProps {
-    icon: React.ReactNode;
+    icon: React$1.ReactNode;
     onClick?: () => void;
 }
 declare function ZestFloatingButton({ icon, onClick }: ZestFloatingButtonProps): react_jsx_runtime.JSX.Element;
 
-interface ZestIconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    icon: React.ReactNode;
+interface ZestIconButtonProps extends React$1.ButtonHTMLAttributes<HTMLButtonElement> {
+    icon: React$1.ReactNode;
 }
 declare function ZestIconButton({ icon, className, ...props }: ZestIconButtonProps): react_jsx_runtime.JSX.Element;
 
-interface ZestLinkButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+interface ZestLinkButtonProps extends React$1.AnchorHTMLAttributes<HTMLAnchorElement> {
     href: string;
 }
 declare function ZestLinkButton({ href, children, className, ...props }: ZestLinkButtonProps): react_jsx_runtime.JSX.Element;
 
 declare function ZestToggleButton({ children }: {
-    children: React.ReactNode;
+    children: React$1.ReactNode;
 }): react_jsx_runtime.JSX.Element;
 
 declare function ZestDivider(): react_jsx_runtime.JSX.Element;
 
-export { ZestBadge, type ZestBadgeProps, ZestButton, type ZestButtonProps, ZestDivider, ZestFloatingButton, type ZestFloatingButtonProps, ZestHeading, type ZestHeadingProps, ZestIconButton, type ZestIconButtonProps, ZestLabel, type ZestLabelProps, ZestLinkButton, type ZestLinkButtonProps, ZestText, type ZestTextProps, ZestToggleButton };
+type AlertType = "success" | "error" | "warning" | "info";
+interface AlertContextValue {
+    showAlert: (options: {
+        type?: AlertType;
+        message: string;
+        duration?: number;
+    }) => void;
+}
+declare const AlertProvider: React$1.FC<{
+    children: React$1.ReactNode;
+}>;
+declare function useAlert(): AlertContextValue;
+
+interface ZestInputProps extends React$1.InputHTMLAttributes<HTMLInputElement> {
+    containerClassName?: string;
+}
+declare const ZestInput: React$1.FC<ZestInputProps>;
+
+interface ZestSelectorProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+    options: {
+        label: string;
+        value: string;
+    }[];
+    containerClassName?: string;
+}
+declare const ZestSelector: React.FC<ZestSelectorProps>;
+
+interface ZestModalProps {
+    open: boolean;
+    onClose: () => void;
+    children: React$1.ReactNode;
+    size?: "sm" | "md" | "lg" | "xl" | number | string;
+    className?: string;
+    overlayClassName?: string;
+}
+declare const ZestModal: React$1.FC<ZestModalProps>;
+
+interface Props$2 {
+    children: React$1.ReactNode;
+    className?: string;
+}
+declare const ZestModalBody: React$1.FC<Props$2>;
+
+interface Props$1 {
+    children: React$1.ReactNode;
+    className?: string;
+}
+declare const ZestModalFooter: React$1.FC<Props$1>;
+
+interface Props {
+    children: React$1.ReactNode;
+    className?: string;
+}
+declare const ZestModalHeader: React$1.FC<Props>;
+
+interface ZestTableColumn<T = any> {
+    key: string;
+    title: string;
+    render?: (row: T, idx: number) => React.ReactNode;
+}
+interface ZestTableProps<T = any> {
+    columns: ZestTableColumn<T>[];
+    data: T[];
+    className?: string;
+}
+declare function ZestTable<T = any>({ columns, data, className }: ZestTableProps<T>): react_jsx_runtime.JSX.Element;
+
+interface ZestTabsProps {
+    tabNames: string[];
+    children: React$1.ReactNode[];
+    className?: string;
+}
+declare const ZestTabs: React$1.FC<ZestTabsProps>;
+
+interface ZestSpinProps {
+    size?: number;
+    color?: string;
+    className?: string;
+}
+declare const ZestSpin: React.FC<ZestSpinProps>;
+
+export { AlertProvider, ZestBadge, type ZestBadgeProps, ZestButton, type ZestButtonProps, ZestDivider, ZestFloatingButton, type ZestFloatingButtonProps, ZestHeading, type ZestHeadingProps, ZestIconButton, type ZestIconButtonProps, ZestInput, type ZestInputProps, ZestLabel, type ZestLabelProps, ZestLinkButton, type ZestLinkButtonProps, ZestModal, ZestModalBody, ZestModalFooter, ZestModalHeader, type ZestModalProps, ZestSelector, type ZestSelectorProps, ZestSpin, type ZestSpinProps, ZestTable, type ZestTableColumn, type ZestTableProps, ZestTabs, type ZestTabsProps, ZestText, type ZestTextProps, ZestToggleButton, useAlert };

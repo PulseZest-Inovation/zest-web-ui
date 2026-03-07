@@ -142,15 +142,313 @@ import { jsx as jsx10 } from "react/jsx-runtime";
 function ZestDivider() {
   return /* @__PURE__ */ jsx10("hr", { className: "border-gray-200 my-4" });
 }
+
+// src/components/Alert/AlertProvider.tsx
+import React2 from "react";
+import { jsx as jsx11, jsxs as jsxs2 } from "react/jsx-runtime";
+var AlertContext = React2.createContext(void 0);
+var DEFAULT_ALERT = {
+  open: false,
+  type: "info",
+  message: "",
+  duration: 3e3
+};
+var AlertProvider = ({ children }) => {
+  const [alert, setAlert] = React2.useState(DEFAULT_ALERT);
+  const timerRef = React2.useRef(null);
+  const showAlert = React2.useCallback(
+    ({ type = "info", message, duration = 3e3 }) => {
+      setAlert({ open: true, type, message, duration });
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        setAlert((a) => ({ ...a, open: false }));
+      }, duration);
+    },
+    []
+  );
+  React2.useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+  return /* @__PURE__ */ jsxs2(AlertContext.Provider, { value: { showAlert }, children: [
+    children,
+    /* @__PURE__ */ jsx11(ZestAlertGlobal, { ...alert })
+  ] });
+};
+function useAlert() {
+  const ctx = React2.useContext(AlertContext);
+  if (!ctx) throw new Error("useAlert must be used within an AlertProvider");
+  return ctx;
+}
+var ZestAlertGlobal = ({ open, type, message, duration }) => {
+  if (!open || !message) return null;
+  const typeStyles = {
+    success: "bg-green-100 text-green-700 border-green-400",
+    error: "bg-red-100 text-red-700 border-red-400",
+    warning: "bg-yellow-100 text-yellow-700 border-yellow-400",
+    info: "bg-blue-100 text-blue-700 border-blue-400"
+  };
+  return /* @__PURE__ */ jsx11(
+    "div",
+    {
+      className: `fixed top-24 left-1/2 -translate-x-1/2 z-50 max-w-md w-fit px-4 py-2 rounded-lg border-2 shadow-lg transition-all duration-300 ${typeStyles[type]}`,
+      style: { pointerEvents: "none" },
+      children: message
+    }
+  );
+};
+
+// src/components/Input/ZestInput.tsx
+import { jsx as jsx12 } from "react/jsx-runtime";
+var ZestInput = ({
+  containerClassName = "",
+  className = "",
+  ...props
+}) => {
+  return /* @__PURE__ */ jsx12(
+    "input",
+    {
+      ...props,
+      className: `px-3 py-1.5 border border-gray-300 rounded-lg w-80 text-primary focus:outline-none focus:ring-2 focus:ring-blue-400 transition ${className}`
+    }
+  );
+};
+{
+}
+
+// src/components/Selector/ZestSelector.tsx
+import { jsx as jsx13 } from "react/jsx-runtime";
+var ZestSelector = ({ options, containerClassName = "", ...props }) => /* @__PURE__ */ jsx13(
+  "select",
+  {
+    ...props,
+    className: `px-3 py-1.5 border w-80 border-gray-300 rounded-lg text-primary bg-primary focus:outline-none focus:ring-2 focus:ring-blue-400 transition ${props.className || ""}`,
+    children: options.map((opt) => /* @__PURE__ */ jsx13("option", { value: opt.value, children: opt.label }, opt.value))
+  }
+);
+
+// src/components/Modal/ZestModal.tsx
+import { useEffect } from "react";
+import { jsx as jsx14 } from "react/jsx-runtime";
+var sizeMap = {
+  sm: "max-w-sm",
+  md: "max-w-md",
+  lg: "max-w-lg",
+  xl: "max-w-xl"
+};
+var ZestModal = ({
+  open,
+  onClose,
+  children,
+  size = "md",
+  className = "",
+  overlayClassName = ""
+}) => {
+  useEffect(() => {
+    if (!open) return;
+    const handleEsc = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleEsc);
+    return () => {
+      document.body.style.overflow = "auto";
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [open, onClose]);
+  if (!open) return null;
+  let widthClass = "";
+  let style = {};
+  if (typeof size === "string" && ["sm", "md", "lg", "xl"].includes(size)) {
+    widthClass = sizeMap[size];
+  } else if (typeof size === "number") {
+    style.width = size;
+  } else if (typeof size === "string") {
+    style.width = size;
+  }
+  return /* @__PURE__ */ jsx14(
+    "div",
+    {
+      className: `fixed inset-0 z-50 flex items-center justify-center bg-black/40 ${overlayClassName}`,
+      onClick: onClose,
+      children: /* @__PURE__ */ jsx14(
+        "div",
+        {
+          className: `bg-primary rounded-lg shadow-lg w-full ${widthClass} ${className}`,
+          style: {
+            ...style,
+            maxWidth: "700px",
+            minWidth: "320px"
+          },
+          onClick: (e) => e.stopPropagation(),
+          children
+        }
+      )
+    }
+  );
+};
+
+// src/components/Modal/ZestModalBody.tsx
+import { jsx as jsx15 } from "react/jsx-runtime";
+var ZestModalBody = ({
+  children,
+  className = ""
+}) => {
+  return /* @__PURE__ */ jsx15("div", { className: `p-4 ${className}`, children });
+};
+
+// src/components/Modal/ZestModalFooter.tsx
+import { jsx as jsx16 } from "react/jsx-runtime";
+var ZestModalFooter = ({
+  children,
+  className = ""
+}) => {
+  return /* @__PURE__ */ jsx16("div", { className: `flex justify-end gap-2 p-4 border-t ${className}`, children });
+};
+
+// src/components/Modal/ZestModalHeader.tsx
+import { jsx as jsx17 } from "react/jsx-runtime";
+var ZestModalHeader = ({
+  children,
+  className = ""
+}) => {
+  return /* @__PURE__ */ jsx17("div", { className: `flex items-center justify-between p-4 border-b ${className}`, children });
+};
+
+// src/components/Table/ZestTable.tsx
+import { jsx as jsx18, jsxs as jsxs3 } from "react/jsx-runtime";
+function ZestTable({ columns, data, className = "" }) {
+  return /* @__PURE__ */ jsx18("div", { className: `overflow-x-auto ${className}`, children: /* @__PURE__ */ jsxs3("table", { className: "min-w-full border border-gray-200 dark:border-zinc-700 rounded-lg", children: [
+    /* @__PURE__ */ jsx18("thead", { children: /* @__PURE__ */ jsx18("tr", { children: columns.map((col) => /* @__PURE__ */ jsx18(
+      "th",
+      {
+        className: "px-4 py-2 text-left font-semibold border-b border-gray-200 dark:border-zinc-700 bg-blue-50 bg-primary text-primary dark:text-blue-100",
+        children: col.title
+      },
+      col.key
+    )) }) }),
+    /* @__PURE__ */ jsx18("tbody", { children: data.length === 0 ? /* @__PURE__ */ jsx18("tr", { children: /* @__PURE__ */ jsx18("td", { colSpan: columns.length, className: "px-4 py-4 text-center text-gray-400  bg-white dark:bg-zinc-900", children: "No data" }) }) : data.map((row, idx) => /* @__PURE__ */ jsx18(
+      "tr",
+      {
+        className: idx % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-blue-50 dark:bg-zinc-800",
+        children: columns.map((col, colIdx) => /* @__PURE__ */ jsx18(
+          "td",
+          {
+            className: `px-4 py-2 border-b border-gray-100 bg-primary text-primary ${colIdx === 0 ? "font-medium text-gray-900 dark:text-blue-100" : "text-gray-700 dark:text-blue-200"}`,
+            children: col.render ? col.render(row, idx) : row[col.key]
+          },
+          col.key
+        ))
+      },
+      idx
+    )) })
+  ] }) });
+}
+
+// src/components/Tabs/ZestTab.tsx
+import React4 from "react";
+import { jsx as jsx19, jsxs as jsxs4 } from "react/jsx-runtime";
+var ZestTabs = ({ tabNames, children, className = "" }) => {
+  const [active, setActive] = React4.useState(0);
+  const [fade, setFade] = React4.useState(true);
+  React4.useEffect(() => {
+    setFade(false);
+    const timeout = setTimeout(() => setFade(true), 10);
+    return () => clearTimeout(timeout);
+  }, [active]);
+  return /* @__PURE__ */ jsxs4("div", { className, children: [
+    /* @__PURE__ */ jsx19("div", { className: "flex border-b mb-4 ", children: tabNames.map((name, idx) => /* @__PURE__ */ jsx19(
+      "button",
+      {
+        className: `px-4 py-2 -mb-px border-b-2 cursor-pointer transition-colors duration-200 focus:outline-none ${active === idx ? "border-blue-500 text-blue-600 font-semibold" : "border-transparent text-gray-500 hover:text-blue-500"}`,
+        onClick: () => setActive(idx),
+        type: "button",
+        children: name
+      },
+      name
+    )) }),
+    /* @__PURE__ */ jsx19(
+      "div",
+      {
+        style: {
+          opacity: fade ? 1 : 0,
+          transition: "opacity 250ms"
+        },
+        children: children[active]
+      }
+    )
+  ] });
+};
+
+// src/components/Spin/ZestSpin.tsx
+import { jsx as jsx20, jsxs as jsxs5 } from "react/jsx-runtime";
+var ZestSpin = ({ size = 24, color = "#2563eb", className = "" }) => /* @__PURE__ */ jsx20(
+  "span",
+  {
+    className: `inline-block animate-spin ${className}`,
+    style: { width: size, height: size },
+    "aria-label": "Loading",
+    children: /* @__PURE__ */ jsxs5(
+      "svg",
+      {
+        width: size,
+        height: size,
+        viewBox: "0 0 50 50",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: [
+          /* @__PURE__ */ jsx20(
+            "circle",
+            {
+              cx: "25",
+              cy: "25",
+              r: "20",
+              stroke: color,
+              strokeWidth: "5",
+              strokeDasharray: "31.4 31.4",
+              strokeLinecap: "round",
+              opacity: "0.3"
+            }
+          ),
+          /* @__PURE__ */ jsx20(
+            "circle",
+            {
+              cx: "25",
+              cy: "25",
+              r: "20",
+              stroke: color,
+              strokeWidth: "5",
+              strokeDasharray: "31.4 31.4",
+              strokeDashoffset: "15.7",
+              strokeLinecap: "round"
+            }
+          )
+        ]
+      }
+    )
+  }
+);
 export {
+  AlertProvider,
   ZestBadge,
   ZestButton,
   ZestDivider,
   ZestFloatingButton,
   ZestHeading,
   ZestIconButton,
+  ZestInput,
   ZestLabel,
   ZestLinkButton,
+  ZestModal,
+  ZestModalBody,
+  ZestModalFooter,
+  ZestModalHeader,
+  ZestSelector,
+  ZestSpin,
+  ZestTable,
+  ZestTabs,
   ZestText,
-  ZestToggleButton
+  ZestToggleButton,
+  useAlert
 };
