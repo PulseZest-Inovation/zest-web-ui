@@ -8,8 +8,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "dev": "tsup src/index.ts --watch --dts"
+    "build": "tsup src/index.ts --format esm,cjs --dts --external react --external react-dom",
+    "dev": "tsup src/index.ts --watch --dts --external react --external react-dom"
   },
   "keywords": [
     "react",
