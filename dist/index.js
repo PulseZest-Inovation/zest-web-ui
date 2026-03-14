@@ -229,11 +229,14 @@ var ZestAlertGlobal = ({ open, type, message, duration }) => {
   return /* @__PURE__ */ jsx13(
     "div",
     {
-      role: "alert",
-      "aria-live": "assertive",
-      tabIndex: 0,
-      className: `fixed top-24 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-fit px-4 py-2 rounded-lg border-2 shadow-lg transition-all duration-300 ${typeStyles[type]}`,
-      style: { pointerEvents: "auto" },
+      className: `fixed top-0 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-fit px-4 py-2 rounded-lg border-2 shadow-lg transition-all duration-300 ${typeStyles[type]}`,
+      style: {
+        pointerEvents: "auto",
+        background: "#fffbe6",
+        // fallback for visibility
+        color: "#222",
+        border: "2px solid #facc15"
+      },
       children: message
     }
   );
@@ -258,15 +261,24 @@ var ZestInput = ({
 }
 
 // src/components/Selector/ZestSelector.tsx
-import { jsx as jsx15 } from "react/jsx-runtime";
-var ZestSelector = ({ options, containerClassName = "", ...props }) => /* @__PURE__ */ jsx15(
+import { jsx as jsx15, jsxs as jsxs5 } from "react/jsx-runtime";
+var ZestSelector = ({
+  options,
+  placeholder = "Select Option",
+  containerClassName = "",
+  ...props
+}) => /* @__PURE__ */ jsx15("div", { className: containerClassName, children: /* @__PURE__ */ jsxs5(
   "select",
   {
     ...props,
     className: `px-3 py-1.5 border w-80 border-gray-300 rounded-lg text-primary bg-primary focus:outline-none focus:ring-2 focus:ring-blue-400 transition ${props.className || ""}`,
-    children: options.map((opt) => /* @__PURE__ */ jsx15("option", { value: opt.value, children: opt.label }, opt.value))
+    defaultValue: "",
+    children: [
+      /* @__PURE__ */ jsx15("option", { value: "", disabled: true, children: placeholder }),
+      options.map((opt) => /* @__PURE__ */ jsx15("option", { value: opt.value, children: opt.label }, opt.value))
+    ]
   }
-);
+) });
 
 // src/components/Modal/ZestModal.tsx
 import { useEffect } from "react";
@@ -357,9 +369,9 @@ var ZestModalHeader = ({
 };
 
 // src/components/Table/ZestTable.tsx
-import { jsx as jsx20, jsxs as jsxs5 } from "react/jsx-runtime";
+import { jsx as jsx20, jsxs as jsxs6 } from "react/jsx-runtime";
 function ZestTable({ columns, data, className = "" }) {
-  return /* @__PURE__ */ jsx20("div", { className: `overflow-x-auto ${className}`, children: /* @__PURE__ */ jsxs5("table", { className: "min-w-full border border-gray-200 dark:border-zinc-700 rounded-lg", children: [
+  return /* @__PURE__ */ jsx20("div", { className: `overflow-x-auto ${className}`, children: /* @__PURE__ */ jsxs6("table", { className: "min-w-full border border-gray-200 dark:border-zinc-700 rounded-lg", children: [
     /* @__PURE__ */ jsx20("thead", { children: /* @__PURE__ */ jsx20("tr", { children: columns.map((col) => /* @__PURE__ */ jsx20(
       "th",
       {
@@ -388,7 +400,7 @@ function ZestTable({ columns, data, className = "" }) {
 
 // src/components/Tabs/ZestTab.tsx
 import React4 from "react";
-import { jsx as jsx21, jsxs as jsxs6 } from "react/jsx-runtime";
+import { jsx as jsx21, jsxs as jsxs7 } from "react/jsx-runtime";
 var ZestTabs = ({ tabNames, children, className = "" }) => {
   const [active, setActive] = React4.useState(0);
   const [fade, setFade] = React4.useState(true);
@@ -397,7 +409,7 @@ var ZestTabs = ({ tabNames, children, className = "" }) => {
     const timeout = setTimeout(() => setFade(true), 10);
     return () => clearTimeout(timeout);
   }, [active]);
-  return /* @__PURE__ */ jsxs6("div", { className, children: [
+  return /* @__PURE__ */ jsxs7("div", { className, children: [
     /* @__PURE__ */ jsx21("div", { className: "flex border-b mb-4 ", children: tabNames.map((name, idx) => /* @__PURE__ */ jsx21(
       "button",
       {
@@ -422,14 +434,14 @@ var ZestTabs = ({ tabNames, children, className = "" }) => {
 };
 
 // src/components/Spin/ZestSpin.tsx
-import { jsx as jsx22, jsxs as jsxs7 } from "react/jsx-runtime";
+import { jsx as jsx22, jsxs as jsxs8 } from "react/jsx-runtime";
 var ZestSpin = ({ size = 24, color = "#2563eb", className = "" }) => /* @__PURE__ */ jsx22(
   "span",
   {
     className: `inline-block animate-spin ${className}`,
     style: { width: size, height: size },
     "aria-label": "Loading",
-    children: /* @__PURE__ */ jsxs7(
+    children: /* @__PURE__ */ jsxs8(
       "svg",
       {
         width: size,

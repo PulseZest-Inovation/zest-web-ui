@@ -287,11 +287,14 @@ var ZestAlertGlobal = ({ open, type, message, duration }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
     "div",
     {
-      role: "alert",
-      "aria-live": "assertive",
-      tabIndex: 0,
-      className: `fixed top-24 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-fit px-4 py-2 rounded-lg border-2 shadow-lg transition-all duration-300 ${typeStyles[type]}`,
-      style: { pointerEvents: "auto" },
+      className: `fixed top-0 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-fit px-4 py-2 rounded-lg border-2 shadow-lg transition-all duration-300 ${typeStyles[type]}`,
+      style: {
+        pointerEvents: "auto",
+        background: "#fffbe6",
+        // fallback for visibility
+        color: "#222",
+        border: "2px solid #facc15"
+      },
       children: message
     }
   );
@@ -317,14 +320,23 @@ var ZestInput = ({
 
 // src/components/Selector/ZestSelector.tsx
 var import_jsx_runtime15 = require("react/jsx-runtime");
-var ZestSelector = ({ options, containerClassName = "", ...props }) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+var ZestSelector = ({
+  options,
+  placeholder = "Select Option",
+  containerClassName = "",
+  ...props
+}) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: containerClassName, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
   "select",
   {
     ...props,
     className: `px-3 py-1.5 border w-80 border-gray-300 rounded-lg text-primary bg-primary focus:outline-none focus:ring-2 focus:ring-blue-400 transition ${props.className || ""}`,
-    children: options.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: opt.value, children: opt.label }, opt.value))
+    defaultValue: "",
+    children: [
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: "", disabled: true, children: placeholder }),
+      options.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: opt.value, children: opt.label }, opt.value))
+    ]
   }
-);
+) });
 
 // src/components/Modal/ZestModal.tsx
 var import_react3 = require("react");

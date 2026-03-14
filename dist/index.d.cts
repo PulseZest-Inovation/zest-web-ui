@@ -96,6 +96,7 @@ interface ZestSelectorProps extends React.SelectHTMLAttributes<HTMLSelectElement
         label: string;
         value: string;
     }[];
+    placeholder?: string;
     containerClassName?: string;
 }
 declare const ZestSelector: React.FC<ZestSelectorProps>;
