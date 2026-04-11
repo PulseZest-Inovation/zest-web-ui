@@ -91,15 +91,16 @@ interface ZestInputProps extends React$1.InputHTMLAttributes<HTMLInputElement> {
 }
 declare const ZestInput: React$1.FC<ZestInputProps>;
 
-interface ZestSelectorProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-    options: {
-        label: string;
-        value: string;
-    }[];
+type Option = {
+    label: string;
+    value: string;
+};
+interface ZestSelectorProps extends Omit<React$1.SelectHTMLAttributes<HTMLSelectElement>, "defaultValue"> {
+    options: Option[];
     placeholder?: string;
     containerClassName?: string;
 }
-declare const ZestSelector: React.FC<ZestSelectorProps>;
+declare const ZestSelector: React$1.FC<ZestSelectorProps>;
 
 interface ZestModalProps {
     open: boolean;
