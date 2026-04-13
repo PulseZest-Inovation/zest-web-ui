@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 export interface ZestTableColumn<T = any> {
   key: string;
@@ -14,6 +14,7 @@ export interface ZestTableProps<T = any> {
   columns: ZestTableColumn<T>[];
   data: T[];
   className?: string;
+  rowsPerPage?: number;
 }
 
 type SortOrder = "asc" | "desc";
@@ -22,9 +23,11 @@ export function ZestTable<T = any>({
   columns,
   data,
   className = "",
+  rowsPerPage = 7,
 }: ZestTableProps<T>) {
   const [sortKey, setSortKey] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleSort = (key: string, sortable?: boolean) => {
     if (!sortable) return;
@@ -35,6 +38,8 @@ export function ZestTable<T = any>({
       setSortKey(key);
       setSortOrder("asc");
     }
+
+    setCurrentPage(1);
   };
 
   const sortedData = useMemo(() => {
@@ -74,84 +79,124 @@ export function ZestTable<T = any>({
     return copied;
   }, [data, columns, sortKey, sortOrder]);
 
+  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
+
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    return sortedData.slice(startIndex, startIndex + rowsPerPage);
+  }, [sortedData, currentPage, rowsPerPage]);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
   const getSortIndicator = (key: string, sortable?: boolean) => {
     if (!sortable) return null;
-    if (sortKey !== key) return "↕";
-    return sortOrder === "asc" ? "↑" : "↓";
+    if (sortKey !== key) return <span className="text-xs opacity-50">↕</span>;
+    return (
+      <span className="text-xs font-semibold">
+        {sortOrder === "asc" ? "↑" : "↓"}
+      </span>
+    );
   };
 
   return (
-    <div className={`overflow-x-auto ${className}`}>
-      <table className="min-w-full border border-gray-200 dark:border-zinc-700 rounded-lg">
-        <thead>
-          <tr>
-            {columns.map((col) => (
-              <th
-                key={col.key}
-                onClick={() => handleSort(col.key, col.sortable)}
-                className="px-4 py-2 text-left font-semibold border-b border-gray-200 dark:border-zinc-700 bg-blue-50 bg-primary text-primary dark:text-blue-100"
-                style={{ cursor: col.sortable ? "pointer" : "default" }}
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span>{col.title}</span>
-                  <span>{getSortIndicator(col.key, col.sortable)}</span>
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-
-        <tbody>
-          {sortedData.length === 0 ? (
-            <tr>
-              <td
-                colSpan={columns.length}
-                className="px-4 py-4 text-center text-gray-400 bg-white dark:bg-zinc-900"
-              >
-                No data
-              </td>
+    <div
+      className={`overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-900 ${className}`}
+    >
+      <div className="w-full overflow-x-auto">
+        <table className="min-w-[700px] w-full border-collapse">
+          <thead>
+            <tr className="bg-gray-50 dark:bg-zinc-800/80">
+              {columns.map((col) => (
+                <th
+                  key={col.key}
+                  onClick={() => handleSort(col.key, col.sortable)}
+                  className={`px-4 sm:px-5 py-3 text-left text-sm font-semibold text-gray-700 dark:text-zinc-100 border-b border-gray-200 dark:border-zinc-700 ${
+                    col.sortable ? "cursor-pointer select-none" : ""
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span>{col.title}</span>
+                    {getSortIndicator(col.key, col.sortable)}
+                  </div>
+                </th>
+              ))}
             </tr>
-          ) : (
-            sortedData.map((row, idx) => (
-              <tr
-                key={idx}
-                className={
-                  idx % 2 === 0
-                    ? "bg-white dark:bg-zinc-900"
-                    : "bg-blue-50 dark:bg-zinc-800"
-                }
-              >
-                {columns.map((col, colIdx) => (
-                  <td
-                    key={col.key}
-                    className={`px-4 py-2 border-b border-gray-100 bg-primary text-primary ${
-                      colIdx === 0
-                        ? "font-medium text-gray-900 dark:text-blue-100"
-                        : "text-gray-700 dark:text-blue-200"
-                    }`}
-                  >
-                    {col.render ? col.render(row, idx) : (row as any)[col.key]}
-                  </td>
-                ))}
+          </thead>
+
+          <tbody>
+            {paginatedData.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="px-4 sm:px-5 py-10 text-center text-sm text-gray-500 dark:text-zinc-400"
+                >
+                  No data available
+                </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              paginatedData.map((row, idx) => (
+                <tr
+                  key={idx}
+                  className="border-b border-gray-100 transition-colors hover:bg-gray-50 dark:border-zinc-800 dark:hover:bg-zinc-800/60"
+                >
+                  {columns.map((col, colIdx) => (
+                    <td
+                      key={col.key}
+                      className={`px-4 sm:px-5 py-4 text-sm align-middle ${
+                        colIdx === 0
+                          ? "font-medium text-gray-900 dark:text-zinc-100"
+                          : "text-gray-700 dark:text-zinc-300"
+                      }`}
+                    >
+                      {col.render
+                        ? col.render(row, (currentPage - 1) * rowsPerPage + idx)
+                        : (row as any)[col.key]}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {sortedData.length > rowsPerPage && (
+        <div className="flex flex-col gap-3 border-t border-gray-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-zinc-700">
+          <div className="text-sm text-gray-600 dark:text-zinc-300">
+            Showing {(currentPage - 1) * rowsPerPage + 1} to{" "}
+            {Math.min(currentPage * rowsPerPage, sortedData.length)} of{" "}
+            {sortedData.length} entries
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+              disabled={currentPage === 1}
+              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:text-zinc-200"
+            >
+              Previous
+            </button>
+
+            <span className="text-sm text-gray-600 dark:text-zinc-300">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <button
+              type="button"
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+              disabled={currentPage === totalPages}
+              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:text-zinc-200"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
-//usage example:
-/*
-const columns = [
-  { key: "name", title: "Name", sortable: true },
-  { key: "age", title: "Age", sortable: true },
-  { key: "email", title: "Email" },
-];
-
-<ZestTable columns={columns} data={data} />
-
-<ZestTable columns={columns} data={data} rowsPerPage={10} />
-
-*/
