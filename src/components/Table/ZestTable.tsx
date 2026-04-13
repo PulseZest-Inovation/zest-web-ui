@@ -107,7 +107,7 @@ export function ZestTable<T = any>({
       className={`overflow-hidden rounded-xl border border-primary bg-primary text-primary shadow-sm ${className}`}
     >
       <div className="w-full overflow-x-auto">
-        <table className="min-w-[900px] w-full border-collapse">
+        <table className="min-w-[1100px] w-full border-collapse">
           <thead>
             <tr className="bg-primary">
               {columns.map((col) => (

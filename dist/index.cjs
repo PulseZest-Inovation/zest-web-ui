@@ -495,7 +495,7 @@ function ZestTable({
     {
       className: `overflow-hidden rounded-xl border border-primary bg-primary text-primary shadow-sm ${className}`,
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full overflow-x-auto", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("table", { className: "min-w-[900px] w-full border-collapse", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full overflow-x-auto", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("table", { className: "min-w-[1100px] w-full border-collapse", children: [
           /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { className: "bg-primary", children: columns.map((col) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
             "th",
             {
