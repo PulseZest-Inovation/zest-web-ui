@@ -104,17 +104,17 @@ export function ZestTable<T = any>({
 
   return (
     <div
-      className={`overflow-hidden rounded-xl border border-gray-200 bg-primary shadow-sm dark:border-zinc-700 dark:bg-zinc-900 ${className}`}
+      className={`overflow-hidden rounded-xl border border-primary bg-primary text-primary shadow-sm ${className}`}
     >
       <div className="w-full overflow-x-auto">
         <table className="min-w-[700px] w-full border-collapse">
           <thead>
-            <tr className="bg-gray-50 dark:bg-zinc-800/80">
+            <tr className="bg-primary">
               {columns.map((col) => (
                 <th
                   key={col.key}
                   onClick={() => handleSort(col.key, col.sortable)}
-                  className={`px-4 sm:px-5 py-3 text-left text-sm font-semibold text-gray-700 dark:text-zinc-100 border-b border-gray-200 dark:border-zinc-700 ${
+                  className={`border-b border-primary px-4 py-3 text-left text-sm font-semibold text-primary sm:px-5 ${
                     col.sortable ? "cursor-pointer select-none" : ""
                   }`}
                 >
@@ -132,7 +132,7 @@ export function ZestTable<T = any>({
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="px-4 sm:px-5 py-10 text-center text-sm text-gray-500 dark:text-zinc-400"
+                  className="px-4 py-10 text-center text-sm text-primary sm:px-5"
                 >
                   No data available
                 </td>
@@ -141,15 +141,13 @@ export function ZestTable<T = any>({
               paginatedData.map((row, idx) => (
                 <tr
                   key={idx}
-                  className="border-b border-gray-100 transition-colors hover:bg-gray-50 dark:border-zinc-800 dark:hover:bg-zinc-800/60"
+                  className="border-b border-primary bg-primary text-primary transition-colors hover:bg-primary"
                 >
                   {columns.map((col, colIdx) => (
                     <td
                       key={col.key}
-                      className={`px-4 sm:px-5 py-4 text-sm align-middle ${
-                        colIdx === 0
-                          ? "font-medium text-gray-900 dark:text-zinc-100"
-                          : "text-gray-700 dark:text-zinc-300"
+                      className={`px-4 py-4 text-sm align-middle text-primary sm:px-5 ${
+                        colIdx === 0 ? "font-medium" : ""
                       }`}
                     >
                       {col.render
@@ -165,8 +163,8 @@ export function ZestTable<T = any>({
       </div>
 
       {sortedData.length > rowsPerPage && (
-        <div className="flex flex-col gap-3 border-t border-gray-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-zinc-700">
-          <div className="text-sm text-gray-600 dark:text-zinc-300">
+        <div className="flex flex-col gap-3 border-t border-primary px-4 py-3 text-primary sm:flex-row sm:items-center sm:justify-between">
+          <div className="text-sm text-primary">
             Showing {(currentPage - 1) * rowsPerPage + 1} to{" "}
             {Math.min(currentPage * rowsPerPage, sortedData.length)} of{" "}
             {sortedData.length} entries
@@ -177,12 +175,12 @@ export function ZestTable<T = any>({
               type="button"
               onClick={() => setCurrentPage((prev) => prev - 1)}
               disabled={currentPage === 1}
-              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:text-zinc-200"
+              className="rounded-md border border-primary bg-primary px-3 py-1.5 text-sm font-medium text-primary disabled:cursor-not-allowed disabled:opacity-50"
             >
               Previous
             </button>
 
-            <span className="text-sm text-gray-600 dark:text-zinc-300">
+            <span className="text-sm text-primary">
               Page {currentPage} of {totalPages}
             </span>
 
@@ -190,7 +188,7 @@ export function ZestTable<T = any>({
               type="button"
               onClick={() => setCurrentPage((prev) => prev + 1)}
               disabled={currentPage === totalPages}
-              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:text-zinc-200"
+              className="rounded-md border border-primary bg-primary px-3 py-1.5 text-sm font-medium text-primary disabled:cursor-not-allowed disabled:opacity-50"
             >
               Next
             </button>

@@ -435,14 +435,14 @@ function ZestTable({
   return /* @__PURE__ */ jsxs6(
     "div",
     {
-      className: `overflow-hidden rounded-xl border border-gray-200 bg-primary shadow-sm dark:border-zinc-700 dark:bg-zinc-900 ${className}`,
+      className: `overflow-hidden rounded-xl border border-primary bg-primary text-primary shadow-sm ${className}`,
       children: [
         /* @__PURE__ */ jsx20("div", { className: "w-full overflow-x-auto", children: /* @__PURE__ */ jsxs6("table", { className: "min-w-[700px] w-full border-collapse", children: [
-          /* @__PURE__ */ jsx20("thead", { children: /* @__PURE__ */ jsx20("tr", { className: "bg-gray-50 dark:bg-zinc-800/80", children: columns.map((col) => /* @__PURE__ */ jsx20(
+          /* @__PURE__ */ jsx20("thead", { children: /* @__PURE__ */ jsx20("tr", { className: "bg-primary", children: columns.map((col) => /* @__PURE__ */ jsx20(
             "th",
             {
               onClick: () => handleSort(col.key, col.sortable),
-              className: `px-4 sm:px-5 py-3 text-left text-sm font-semibold text-gray-700 dark:text-zinc-100 border-b border-gray-200 dark:border-zinc-700 ${col.sortable ? "cursor-pointer select-none" : ""}`,
+              className: `border-b border-primary px-4 py-3 text-left text-sm font-semibold text-primary sm:px-5 ${col.sortable ? "cursor-pointer select-none" : ""}`,
               children: /* @__PURE__ */ jsxs6("div", { className: "flex items-center justify-between gap-2", children: [
                 /* @__PURE__ */ jsx20("span", { children: col.title }),
                 getSortIndicator(col.key, col.sortable)
@@ -454,17 +454,17 @@ function ZestTable({
             "td",
             {
               colSpan: columns.length,
-              className: "px-4 sm:px-5 py-10 text-center text-sm text-gray-500 dark:text-zinc-400",
+              className: "px-4 py-10 text-center text-sm text-primary sm:px-5",
               children: "No data available"
             }
           ) }) : paginatedData.map((row, idx) => /* @__PURE__ */ jsx20(
             "tr",
             {
-              className: "border-b border-gray-100 transition-colors hover:bg-gray-50 dark:border-zinc-800 dark:hover:bg-zinc-800/60",
+              className: "border-b border-primary bg-primary text-primary transition-colors hover:bg-primary",
               children: columns.map((col, colIdx) => /* @__PURE__ */ jsx20(
                 "td",
                 {
-                  className: `px-4 sm:px-5 py-4 text-sm align-middle ${colIdx === 0 ? "font-medium text-gray-900 dark:text-zinc-100" : "text-gray-700 dark:text-zinc-300"}`,
+                  className: `px-4 py-4 text-sm align-middle text-primary sm:px-5 ${colIdx === 0 ? "font-medium" : ""}`,
                   children: col.render ? col.render(row, (currentPage - 1) * rowsPerPage + idx) : row[col.key]
                 },
                 col.key
@@ -473,8 +473,8 @@ function ZestTable({
             idx
           )) })
         ] }) }),
-        sortedData.length > rowsPerPage && /* @__PURE__ */ jsxs6("div", { className: "flex flex-col gap-3 border-t border-gray-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-zinc-700", children: [
-          /* @__PURE__ */ jsxs6("div", { className: "text-sm text-gray-600 dark:text-zinc-300", children: [
+        sortedData.length > rowsPerPage && /* @__PURE__ */ jsxs6("div", { className: "flex flex-col gap-3 border-t border-primary px-4 py-3 text-primary sm:flex-row sm:items-center sm:justify-between", children: [
+          /* @__PURE__ */ jsxs6("div", { className: "text-sm text-primary", children: [
             "Showing ",
             (currentPage - 1) * rowsPerPage + 1,
             " to",
@@ -492,11 +492,11 @@ function ZestTable({
                 type: "button",
                 onClick: () => setCurrentPage((prev) => prev - 1),
                 disabled: currentPage === 1,
-                className: "rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:text-zinc-200",
+                className: "rounded-md border border-primary bg-primary px-3 py-1.5 text-sm font-medium text-primary disabled:cursor-not-allowed disabled:opacity-50",
                 children: "Previous"
               }
             ),
-            /* @__PURE__ */ jsxs6("span", { className: "text-sm text-gray-600 dark:text-zinc-300", children: [
+            /* @__PURE__ */ jsxs6("span", { className: "text-sm text-primary", children: [
               "Page ",
               currentPage,
               " of ",
@@ -508,7 +508,7 @@ function ZestTable({
                 type: "button",
                 onClick: () => setCurrentPage((prev) => prev + 1),
                 disabled: currentPage === totalPages,
-                className: "rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:text-zinc-200",
+                className: "rounded-md border border-primary bg-primary px-3 py-1.5 text-sm font-medium text-primary disabled:cursor-not-allowed disabled:opacity-50",
                 children: "Next"
               }
             )
