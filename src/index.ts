@@ -37,7 +37,7 @@ export * from "./components/Modal/ZestModalHeader";
 
 // -------------Table COMPONENTS----------------
 export * from "./components/Table/ZestTable";
-
+export type { ZestTableProps, ZestTableColumn } from "./components/Table/ZestTable";
 
 // -------------Tabs COMPONENTS----------------
 export * from "./components/Tabs/ZestTab";
