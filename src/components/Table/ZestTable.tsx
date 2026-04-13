@@ -107,7 +107,7 @@ export function ZestTable<T = any>({
       className={`overflow-hidden rounded-xl border border-primary bg-primary text-primary shadow-sm ${className}`}
     >
       <div className="w-full overflow-x-auto">
-        <table className="min-w-[1100px] w-full border-collapse">
+        <table className="min-w-max w-max border-collapse">
           <thead>
             <tr className="bg-primary">
               {columns.map((col) => (
@@ -118,7 +118,7 @@ export function ZestTable<T = any>({
                     col.sortable ? "cursor-pointer select-none" : ""
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                     <span className="whitespace-nowrap">{col.title}</span>
                     {getSortIndicator(col.key, col.sortable)}
                   </div>
@@ -146,7 +146,7 @@ export function ZestTable<T = any>({
                   {columns.map((col, colIdx) => (
                     <td
                       key={col.key}
-                      className={`px-4 py-4 text-sm align-middle text-primary sm:px-5 whitespace-nowrap ${
+                      className={`whitespace-nowrap px-4 py-4 text-sm align-middle text-primary sm:px-5 whitespace-nowrap ${
                         colIdx === 0 ? "font-medium" : ""
                       }`}
                     >

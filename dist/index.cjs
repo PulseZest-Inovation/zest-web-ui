@@ -495,13 +495,13 @@ function ZestTable({
     {
       className: `overflow-hidden rounded-xl border border-primary bg-primary text-primary shadow-sm ${className}`,
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full overflow-x-auto", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("table", { className: "min-w-[1100px] w-full border-collapse", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full overflow-x-auto", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("table", { className: "min-w-max w-max border-collapse", children: [
           /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { className: "bg-primary", children: columns.map((col) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
             "th",
             {
               onClick: () => handleSort(col.key, col.sortable),
               className: `border-b border-primary px-4 py-3 text-left text-sm font-semibold text-primary sm:px-5 ${col.sortable ? "cursor-pointer select-none" : ""}`,
-              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-between gap-2", children: [
+              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-between gap-2 whitespace-nowrap", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "whitespace-nowrap", children: col.title }),
                 getSortIndicator(col.key, col.sortable)
               ] })
@@ -522,7 +522,7 @@ function ZestTable({
               children: columns.map((col, colIdx) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                 "td",
                 {
-                  className: `px-4 py-4 text-sm align-middle text-primary sm:px-5 whitespace-nowrap ${colIdx === 0 ? "font-medium" : ""}`,
+                  className: `whitespace-nowrap px-4 py-4 text-sm align-middle text-primary sm:px-5 whitespace-nowrap ${colIdx === 0 ? "font-medium" : ""}`,
                   children: col.render ? col.render(row, (currentPage - 1) * rowsPerPage + idx) : row[col.key]
                 },
                 col.key
