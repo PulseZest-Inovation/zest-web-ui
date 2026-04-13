@@ -437,10 +437,12 @@ function ZestTable({
   columns,
   data,
   className = "",
-  rowsPerPage = 7
+  rowsPerPage = 7,
+  defaultSortKey = "",
+  defaultSortOrder = "asc"
 }) {
-  const [sortKey, setSortKey] = (0, import_react4.useState)("");
-  const [sortOrder, setSortOrder] = (0, import_react4.useState)("asc");
+  const [sortKey, setSortKey] = (0, import_react4.useState)(defaultSortKey);
+  const [sortOrder, setSortOrder] = (0, import_react4.useState)(defaultSortOrder);
   const [currentPage, setCurrentPage] = (0, import_react4.useState)(1);
   const handleSort = (key, sortable) => {
     if (!sortable) return;

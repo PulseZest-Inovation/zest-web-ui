@@ -142,8 +142,10 @@ interface ZestTableProps<T = any> {
     data: T[];
     className?: string;
     rowsPerPage?: number;
+    defaultSortKey?: string;
+    defaultSortOrder?: "asc" | "desc";
 }
-declare function ZestTable<T = any>({ columns, data, className, rowsPerPage, }: ZestTableProps<T>): react_jsx_runtime.JSX.Element;
+declare function ZestTable<T = any>({ columns, data, className, rowsPerPage, defaultSortKey, defaultSortOrder, }: ZestTableProps<T>): react_jsx_runtime.JSX.Element;
 
 interface ZestTabsProps {
     tabNames: string[];

@@ -15,6 +15,8 @@ export interface ZestTableProps<T = any> {
   data: T[];
   className?: string;
   rowsPerPage?: number;
+  defaultSortKey?: string;
+  defaultSortOrder?: "asc" | "desc";
 }
 
 type SortOrder = "asc" | "desc";
@@ -24,9 +26,11 @@ export function ZestTable<T = any>({
   data,
   className = "",
   rowsPerPage = 7,
+  defaultSortKey = "",
+  defaultSortOrder = "asc",
 }: ZestTableProps<T>) {
-  const [sortKey, setSortKey] = useState<string>("");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [sortKey, setSortKey] = useState<string>(defaultSortKey);
+  const [sortOrder, setSortOrder] = useState<SortOrder>(defaultSortOrder);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleSort = (key: string, sortable?: boolean) => {
