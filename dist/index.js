@@ -437,7 +437,7 @@ function ZestTable({
     {
       className: `overflow-hidden rounded-xl border border-primary bg-primary text-primary shadow-sm ${className}`,
       children: [
-        /* @__PURE__ */ jsx20("div", { className: "w-full overflow-x-auto", children: /* @__PURE__ */ jsxs6("table", { className: "min-w-[700px] w-full border-collapse", children: [
+        /* @__PURE__ */ jsx20("div", { className: "w-full overflow-x-auto", children: /* @__PURE__ */ jsxs6("table", { className: "min-w-[900px] w-full border-collapse", children: [
           /* @__PURE__ */ jsx20("thead", { children: /* @__PURE__ */ jsx20("tr", { className: "bg-primary", children: columns.map((col) => /* @__PURE__ */ jsx20(
             "th",
             {
