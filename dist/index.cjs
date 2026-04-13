@@ -431,42 +431,120 @@ var ZestModalHeader = ({
 };
 
 // src/components/Table/ZestTable.tsx
+var import_react4 = require("react");
 var import_jsx_runtime20 = require("react/jsx-runtime");
-function ZestTable({ columns, data, className = "" }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: `overflow-x-auto ${className}`, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("table", { className: "min-w-full border border-gray-200 dark:border-zinc-700 rounded-lg", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { children: columns.map((col) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-      "th",
-      {
-        className: "px-4 py-2 text-left font-semibold border-b border-gray-200 dark:border-zinc-700 bg-blue-50 bg-primary text-primary dark:text-blue-100",
-        children: col.title
-      },
-      col.key
-    )) }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tbody", { children: data.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { colSpan: columns.length, className: "px-4 py-4 text-center text-gray-400  bg-white dark:bg-zinc-900", children: "No data" }) }) : data.map((row, idx) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-      "tr",
-      {
-        className: idx % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-blue-50 dark:bg-zinc-800",
-        children: columns.map((col, colIdx) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-          "td",
+function ZestTable({
+  columns,
+  data,
+  className = "",
+  rowsPerPage = 10
+}) {
+  const [sortKey, setSortKey] = (0, import_react4.useState)("");
+  const [sortOrder, setSortOrder] = (0, import_react4.useState)("asc");
+  const [currentPage, setCurrentPage] = (0, import_react4.useState)(1);
+  const handleSort = (key, sortable) => {
+    if (!sortable) return;
+    if (sortKey === key) {
+      setSortOrder((prev) => prev === "asc" ? "desc" : "asc");
+    } else {
+      setSortKey(key);
+      setSortOrder("asc");
+    }
+    setCurrentPage(1);
+  };
+  const sortedData = (0, import_react4.useMemo)(() => {
+    const copied = [...data];
+    if (!sortKey) return copied;
+    const column = columns.find((col) => col.key === sortKey);
+    if (!column) return copied;
+    copied.sort((a, b) => {
+      const valueA = column.sortValue ? column.sortValue(a) : a[sortKey];
+      const valueB = column.sortValue ? column.sortValue(b) : b[sortKey];
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return sortOrder === "asc" ? -1 : 1;
+      if (valueB == null) return sortOrder === "asc" ? 1 : -1;
+      if (typeof valueA === "number" && typeof valueB === "number") {
+        return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
+      }
+      if (valueA instanceof Date && valueB instanceof Date) {
+        return sortOrder === "asc" ? valueA.getTime() - valueB.getTime() : valueB.getTime() - valueA.getTime();
+      }
+      const aStr = String(valueA).toLowerCase();
+      const bStr = String(valueB).toLowerCase();
+      return sortOrder === "asc" ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
+    });
+    return copied;
+  }, [data, columns, sortKey, sortOrder]);
+  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
+  const paginatedData = (0, import_react4.useMemo)(() => {
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    return sortedData.slice(startIndex, startIndex + rowsPerPage);
+  }, [sortedData, currentPage, rowsPerPage]);
+  (0, import_react4.useEffect)(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+  const getSortIndicator = (key, sortable) => {
+    if (!sortable) return null;
+    if (sortKey !== key) return "\u2195";
+    return sortOrder === "asc" ? "\u2191" : "\u2193";
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: `overflow-x-auto ${className}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("table", { className: "min-w-full border border-gray-200 dark:border-zinc-700 rounded-lg", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { children: columns.map((col) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+        "th",
+        {
+          onClick: () => handleSort(col.key, col.sortable),
+          className: "px-4 py-2 text-left font-semibold border-b border-gray-200 dark:border-zinc-700",
+          style: { cursor: col.sortable ? "pointer" : "default" },
+          children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-between gap-2", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { children: col.title }),
+            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { children: getSortIndicator(col.key, col.sortable) })
+          ] })
+        },
+        col.key
+      )) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tbody", { children: paginatedData.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { colSpan: columns.length, className: "px-4 py-4 text-center", children: "No data" }) }) : paginatedData.map((row, idx) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { children: columns.map((col) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { className: "px-4 py-2 border-b border-gray-100", children: col.render ? col.render(row, (currentPage - 1) * rowsPerPage + idx) : row[col.key] }, col.key)) }, idx)) })
+    ] }),
+    sortedData.length > rowsPerPage && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-between mt-4", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("span", { children: [
+        "Page ",
+        currentPage,
+        " of ",
+        totalPages
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex gap-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          "button",
           {
-            className: `px-4 py-2 border-b border-gray-100 bg-primary text-primary ${colIdx === 0 ? "font-medium text-gray-900 dark:text-blue-100" : "text-gray-700 dark:text-blue-200"}`,
-            children: col.render ? col.render(row, idx) : row[col.key]
-          },
-          col.key
-        ))
-      },
-      idx
-    )) })
-  ] }) });
+            type: "button",
+            onClick: () => setCurrentPage((prev) => prev - 1),
+            disabled: currentPage === 1,
+            children: "Previous"
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          "button",
+          {
+            type: "button",
+            onClick: () => setCurrentPage((prev) => prev + 1),
+            disabled: currentPage === totalPages,
+            children: "Next"
+          }
+        )
+      ] })
+    ] })
+  ] });
 }
 
 // src/components/Tabs/ZestTab.tsx
-var import_react4 = __toESM(require("react"), 1);
+var import_react5 = __toESM(require("react"), 1);
 var import_jsx_runtime21 = require("react/jsx-runtime");
 var ZestTabs = ({ tabNames, children, className = "" }) => {
-  const [active, setActive] = import_react4.default.useState(0);
-  const [fade, setFade] = import_react4.default.useState(true);
-  import_react4.default.useEffect(() => {
+  const [active, setActive] = import_react5.default.useState(0);
+  const [fade, setFade] = import_react5.default.useState(true);
+  import_react5.default.useEffect(() => {
     setFade(false);
     const timeout = setTimeout(() => setFade(true), 10);
     return () => clearTimeout(timeout);

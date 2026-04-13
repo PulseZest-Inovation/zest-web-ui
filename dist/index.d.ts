@@ -133,14 +133,17 @@ declare const ZestModalHeader: React$1.FC<Props>;
 interface ZestTableColumn<T = any> {
     key: string;
     title: string;
-    render?: (row: T, idx: number) => React.ReactNode;
+    render?: (row: T, idx: number) => React$1.ReactNode;
+    sortable?: boolean;
+    sortValue?: (row: T) => string | number | Date | null | undefined;
 }
 interface ZestTableProps<T = any> {
     columns: ZestTableColumn<T>[];
     data: T[];
     className?: string;
+    rowsPerPage?: number;
 }
-declare function ZestTable<T = any>({ columns, data, className }: ZestTableProps<T>): react_jsx_runtime.JSX.Element;
+declare function ZestTable<T = any>({ columns, data, className, rowsPerPage, }: ZestTableProps<T>): react_jsx_runtime.JSX.Element;
 
 interface ZestTabsProps {
     tabNames: string[];
