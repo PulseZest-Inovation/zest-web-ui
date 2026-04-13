@@ -444,7 +444,7 @@ function ZestTable({
               onClick: () => handleSort(col.key, col.sortable),
               className: `border-b border-primary px-4 py-3 text-left text-sm font-semibold text-primary sm:px-5 ${col.sortable ? "cursor-pointer select-none" : ""}`,
               children: /* @__PURE__ */ jsxs6("div", { className: "flex items-center justify-between gap-2", children: [
-                /* @__PURE__ */ jsx20("span", { children: col.title }),
+                /* @__PURE__ */ jsx20("span", { className: "whitespace-nowrap", children: col.title }),
                 getSortIndicator(col.key, col.sortable)
               ] })
             },
@@ -464,7 +464,7 @@ function ZestTable({
               children: columns.map((col, colIdx) => /* @__PURE__ */ jsx20(
                 "td",
                 {
-                  className: `px-4 py-4 text-sm align-middle text-primary sm:px-5 ${colIdx === 0 ? "font-medium" : ""}`,
+                  className: `px-4 py-4 text-sm align-middle text-primary sm:px-5 whitespace-nowrap ${colIdx === 0 ? "font-medium" : ""}`,
                   children: col.render ? col.render(row, (currentPage - 1) * rowsPerPage + idx) : row[col.key]
                 },
                 col.key

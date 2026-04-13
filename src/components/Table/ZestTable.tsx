@@ -119,7 +119,7 @@ export function ZestTable<T = any>({
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span>{col.title}</span>
+                    <span className="whitespace-nowrap">{col.title}</span>
                     {getSortIndicator(col.key, col.sortable)}
                   </div>
                 </th>
@@ -146,7 +146,7 @@ export function ZestTable<T = any>({
                   {columns.map((col, colIdx) => (
                     <td
                       key={col.key}
-                      className={`px-4 py-4 text-sm align-middle text-primary sm:px-5 ${
+                      className={`px-4 py-4 text-sm align-middle text-primary sm:px-5 whitespace-nowrap ${
                         colIdx === 0 ? "font-medium" : ""
                       }`}
                     >
