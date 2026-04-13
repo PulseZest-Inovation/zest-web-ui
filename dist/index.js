@@ -373,17 +373,15 @@ var ZestModalHeader = ({
 };
 
 // src/components/Table/ZestTable.tsx
-import { useEffect as useEffect2, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { jsx as jsx20, jsxs as jsxs6 } from "react/jsx-runtime";
 function ZestTable({
   columns,
   data,
-  className = "",
-  rowsPerPage = 10
+  className = ""
 }) {
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
-  const [currentPage, setCurrentPage] = useState(1);
   const handleSort = (key, sortable) => {
     if (!sortable) return;
     if (sortKey === key) {
@@ -392,7 +390,6 @@ function ZestTable({
       setSortKey(key);
       setSortOrder("asc");
     }
-    setCurrentPage(1);
   };
   const sortedData = useMemo(() => {
     const copied = [...data];
@@ -417,67 +414,48 @@ function ZestTable({
     });
     return copied;
   }, [data, columns, sortKey, sortOrder]);
-  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * rowsPerPage;
-    return sortedData.slice(startIndex, startIndex + rowsPerPage);
-  }, [sortedData, currentPage, rowsPerPage]);
-  useEffect2(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
   const getSortIndicator = (key, sortable) => {
     if (!sortable) return null;
     if (sortKey !== key) return "\u2195";
     return sortOrder === "asc" ? "\u2191" : "\u2193";
   };
-  return /* @__PURE__ */ jsxs6("div", { className: `overflow-x-auto ${className}`, children: [
-    /* @__PURE__ */ jsxs6("table", { className: "min-w-full border border-gray-200 dark:border-zinc-700 rounded-lg", children: [
-      /* @__PURE__ */ jsx20("thead", { children: /* @__PURE__ */ jsx20("tr", { children: columns.map((col) => /* @__PURE__ */ jsx20(
-        "th",
-        {
-          onClick: () => handleSort(col.key, col.sortable),
-          className: "px-4 py-2 text-left font-semibold border-b border-gray-200 dark:border-zinc-700",
-          style: { cursor: col.sortable ? "pointer" : "default" },
-          children: /* @__PURE__ */ jsxs6("div", { className: "flex items-center justify-between gap-2", children: [
-            /* @__PURE__ */ jsx20("span", { children: col.title }),
-            /* @__PURE__ */ jsx20("span", { children: getSortIndicator(col.key, col.sortable) })
-          ] })
-        },
-        col.key
-      )) }) }),
-      /* @__PURE__ */ jsx20("tbody", { children: paginatedData.length === 0 ? /* @__PURE__ */ jsx20("tr", { children: /* @__PURE__ */ jsx20("td", { colSpan: columns.length, className: "px-4 py-4 text-center", children: "No data" }) }) : paginatedData.map((row, idx) => /* @__PURE__ */ jsx20("tr", { children: columns.map((col) => /* @__PURE__ */ jsx20("td", { className: "px-4 py-2 border-b border-gray-100", children: col.render ? col.render(row, (currentPage - 1) * rowsPerPage + idx) : row[col.key] }, col.key)) }, idx)) })
-    ] }),
-    sortedData.length > rowsPerPage && /* @__PURE__ */ jsxs6("div", { className: "flex items-center justify-between mt-4", children: [
-      /* @__PURE__ */ jsxs6("span", { children: [
-        "Page ",
-        currentPage,
-        " of ",
-        totalPages
-      ] }),
-      /* @__PURE__ */ jsxs6("div", { className: "flex gap-2", children: [
-        /* @__PURE__ */ jsx20(
-          "button",
+  return /* @__PURE__ */ jsx20("div", { className: `overflow-x-auto ${className}`, children: /* @__PURE__ */ jsxs6("table", { className: "min-w-full border border-gray-200 dark:border-zinc-700 rounded-lg", children: [
+    /* @__PURE__ */ jsx20("thead", { children: /* @__PURE__ */ jsx20("tr", { children: columns.map((col) => /* @__PURE__ */ jsx20(
+      "th",
+      {
+        onClick: () => handleSort(col.key, col.sortable),
+        className: "px-4 py-2 text-left font-semibold border-b border-gray-200 dark:border-zinc-700 bg-blue-50 bg-primary text-primary dark:text-blue-100",
+        style: { cursor: col.sortable ? "pointer" : "default" },
+        children: /* @__PURE__ */ jsxs6("div", { className: "flex items-center justify-between gap-2", children: [
+          /* @__PURE__ */ jsx20("span", { children: col.title }),
+          /* @__PURE__ */ jsx20("span", { children: getSortIndicator(col.key, col.sortable) })
+        ] })
+      },
+      col.key
+    )) }) }),
+    /* @__PURE__ */ jsx20("tbody", { children: sortedData.length === 0 ? /* @__PURE__ */ jsx20("tr", { children: /* @__PURE__ */ jsx20(
+      "td",
+      {
+        colSpan: columns.length,
+        className: "px-4 py-4 text-center text-gray-400 bg-white dark:bg-zinc-900",
+        children: "No data"
+      }
+    ) }) : sortedData.map((row, idx) => /* @__PURE__ */ jsx20(
+      "tr",
+      {
+        className: idx % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-blue-50 dark:bg-zinc-800",
+        children: columns.map((col, colIdx) => /* @__PURE__ */ jsx20(
+          "td",
           {
-            type: "button",
-            onClick: () => setCurrentPage((prev) => prev - 1),
-            disabled: currentPage === 1,
-            children: "Previous"
-          }
-        ),
-        /* @__PURE__ */ jsx20(
-          "button",
-          {
-            type: "button",
-            onClick: () => setCurrentPage((prev) => prev + 1),
-            disabled: currentPage === totalPages,
-            children: "Next"
-          }
-        )
-      ] })
-    ] })
-  ] });
+            className: `px-4 py-2 border-b border-gray-100 bg-primary text-primary ${colIdx === 0 ? "font-medium text-gray-900 dark:text-blue-100" : "text-gray-700 dark:text-blue-200"}`,
+            children: col.render ? col.render(row, idx) : row[col.key]
+          },
+          col.key
+        ))
+      },
+      idx
+    )) })
+  ] }) });
 }
 
 // src/components/Tabs/ZestTab.tsx

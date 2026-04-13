@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 export interface ZestTableColumn<T = any> {
   key: string;
@@ -14,7 +14,6 @@ export interface ZestTableProps<T = any> {
   columns: ZestTableColumn<T>[];
   data: T[];
   className?: string;
-  rowsPerPage?: number;
 }
 
 type SortOrder = "asc" | "desc";
@@ -23,11 +22,9 @@ export function ZestTable<T = any>({
   columns,
   data,
   className = "",
-  rowsPerPage = 10,
 }: ZestTableProps<T>) {
   const [sortKey, setSortKey] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
-  const [currentPage, setCurrentPage] = useState(1);
 
   const handleSort = (key: string, sortable?: boolean) => {
     if (!sortable) return;
@@ -38,8 +35,6 @@ export function ZestTable<T = any>({
       setSortKey(key);
       setSortOrder("asc");
     }
-
-    setCurrentPage(1);
   };
 
   const sortedData = useMemo(() => {
@@ -79,19 +74,6 @@ export function ZestTable<T = any>({
     return copied;
   }, [data, columns, sortKey, sortOrder]);
 
-  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
-
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * rowsPerPage;
-    return sortedData.slice(startIndex, startIndex + rowsPerPage);
-  }, [sortedData, currentPage, rowsPerPage]);
-
-  useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
-
   const getSortIndicator = (key: string, sortable?: boolean) => {
     if (!sortable) return null;
     if (sortKey !== key) return "↕";
@@ -107,7 +89,7 @@ export function ZestTable<T = any>({
               <th
                 key={col.key}
                 onClick={() => handleSort(col.key, col.sortable)}
-                className="px-4 py-2 text-left font-semibold border-b border-gray-200 dark:border-zinc-700"
+                className="px-4 py-2 text-left font-semibold border-b border-gray-200 dark:border-zinc-700 bg-blue-50 bg-primary text-primary dark:text-blue-100"
                 style={{ cursor: col.sortable ? "pointer" : "default" }}
               >
                 <div className="flex items-center justify-between gap-2">
@@ -120,20 +102,35 @@ export function ZestTable<T = any>({
         </thead>
 
         <tbody>
-          {paginatedData.length === 0 ? (
+          {sortedData.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="px-4 py-4 text-center">
+              <td
+                colSpan={columns.length}
+                className="px-4 py-4 text-center text-gray-400 bg-white dark:bg-zinc-900"
+              >
                 No data
               </td>
             </tr>
           ) : (
-            paginatedData.map((row, idx) => (
-              <tr key={idx}>
-                {columns.map((col) => (
-                  <td key={col.key} className="px-4 py-2 border-b border-gray-100">
-                    {col.render
-                      ? col.render(row, (currentPage - 1) * rowsPerPage + idx)
-                      : (row as any)[col.key]}
+            sortedData.map((row, idx) => (
+              <tr
+                key={idx}
+                className={
+                  idx % 2 === 0
+                    ? "bg-white dark:bg-zinc-900"
+                    : "bg-blue-50 dark:bg-zinc-800"
+                }
+              >
+                {columns.map((col, colIdx) => (
+                  <td
+                    key={col.key}
+                    className={`px-4 py-2 border-b border-gray-100 bg-primary text-primary ${
+                      colIdx === 0
+                        ? "font-medium text-gray-900 dark:text-blue-100"
+                        : "text-gray-700 dark:text-blue-200"
+                    }`}
+                  >
+                    {col.render ? col.render(row, idx) : (row as any)[col.key]}
                   </td>
                 ))}
               </tr>
@@ -141,35 +138,10 @@ export function ZestTable<T = any>({
           )}
         </tbody>
       </table>
-
-      {sortedData.length > rowsPerPage && (
-        <div className="flex items-center justify-between mt-4">
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setCurrentPage((prev) => prev - 1)}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
+
 //usage example:
 /*
 const columns = [
