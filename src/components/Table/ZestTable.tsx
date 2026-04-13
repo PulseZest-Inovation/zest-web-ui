@@ -104,7 +104,7 @@ export function ZestTable<T = any>({
 
   return (
     <div
-      className={`overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-900 ${className}`}
+      className={`overflow-hidden rounded-xl border border-gray-200 bg-primary shadow-sm dark:border-zinc-700 dark:bg-zinc-900 ${className}`}
     >
       <div className="w-full overflow-x-auto">
         <table className="min-w-[700px] w-full border-collapse">
