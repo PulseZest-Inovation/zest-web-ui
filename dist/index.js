@@ -373,152 +373,630 @@ var ZestModalHeader = ({
 };
 
 // src/components/Table/ZestTable.tsx
-import { useEffect as useEffect2, useMemo, useState } from "react";
-import { jsx as jsx20, jsxs as jsxs6 } from "react/jsx-runtime";
+import React4, { useEffect as useEffect2, useMemo, useRef, useState } from "react";
+import { Fragment, jsx as jsx20, jsxs as jsxs6 } from "react/jsx-runtime";
+var SIZE_PADDING = {
+  small: "px-3 py-1.5",
+  middle: "px-4 py-3",
+  large: "px-5 py-4"
+};
+function getRowKey(row, rowKey, idx) {
+  if (!rowKey) return idx;
+  if (typeof rowKey === "function") return rowKey(row);
+  return row[rowKey] ?? idx;
+}
+function getCellValue(row, col) {
+  return row[col.dataIndex ?? col.key];
+}
+function FilterDropdown({
+  filters,
+  activeValues,
+  multiple,
+  onApply,
+  onReset
+}) {
+  const [selected, setSelected] = useState(activeValues);
+  const toggle = (value) => {
+    if (multiple) {
+      setSelected(
+        (prev) => prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+      );
+    } else {
+      setSelected((prev) => prev.includes(value) ? [] : [value]);
+    }
+  };
+  return /* @__PURE__ */ jsxs6(
+    "div",
+    {
+      className: "absolute z-50 top-full left-0 mt-1 min-w-[160px] rounded-lg border border-gray-200 bg-white shadow-lg text-sm text-gray-700",
+      onClick: (e) => e.stopPropagation(),
+      children: [
+        /* @__PURE__ */ jsx20("div", { className: "max-h-52 overflow-y-auto p-2 space-y-0.5", children: filters.map((f) => /* @__PURE__ */ jsxs6(
+          "label",
+          {
+            className: "flex items-center gap-2 cursor-pointer px-2 py-1.5 rounded hover:bg-gray-50",
+            children: [
+              /* @__PURE__ */ jsx20(
+                "input",
+                {
+                  type: multiple ? "checkbox" : "radio",
+                  checked: selected.includes(f.value),
+                  onChange: () => toggle(f.value),
+                  className: "accent-blue-500 h-3.5 w-3.5"
+                }
+              ),
+              /* @__PURE__ */ jsx20("span", { className: "select-none", children: f.text })
+            ]
+          },
+          String(f.value)
+        )) }),
+        /* @__PURE__ */ jsxs6("div", { className: "flex justify-between border-t border-gray-100 px-2 py-1.5 gap-2", children: [
+          /* @__PURE__ */ jsx20(
+            "button",
+            {
+              onClick: () => {
+                setSelected([]);
+                onReset();
+              },
+              className: "text-xs text-gray-400 hover:text-gray-600",
+              children: "Reset"
+            }
+          ),
+          /* @__PURE__ */ jsx20(
+            "button",
+            {
+              onClick: () => onApply(selected),
+              className: "rounded bg-blue-500 px-2.5 py-1 text-xs text-white hover:bg-blue-600",
+              children: "OK"
+            }
+          )
+        ] })
+      ]
+    }
+  );
+}
+function TableSpinner() {
+  return /* @__PURE__ */ jsx20("div", { className: "absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px] rounded-xl", children: /* @__PURE__ */ jsxs6(
+    "svg",
+    {
+      className: "h-8 w-8 animate-spin text-blue-500",
+      xmlns: "http://www.w3.org/2000/svg",
+      fill: "none",
+      viewBox: "0 0 24 24",
+      children: [
+        /* @__PURE__ */ jsx20(
+          "circle",
+          {
+            className: "opacity-25",
+            cx: "12",
+            cy: "12",
+            r: "10",
+            stroke: "currentColor",
+            strokeWidth: "4"
+          }
+        ),
+        /* @__PURE__ */ jsx20(
+          "path",
+          {
+            className: "opacity-75",
+            fill: "currentColor",
+            d: "M4 12a8 8 0 018-8v8H4z"
+          }
+        )
+      ]
+    }
+  ) });
+}
 function ZestTable({
   columns,
   data,
+  rowKey,
   className = "",
-  rowsPerPage = 7,
+  rowsPerPage = 10,
+  pagination,
   defaultSortKey = "",
-  defaultSortOrder = "asc"
+  defaultSortOrder = "asc",
+  loading = false,
+  rowSelection,
+  expandable,
+  size = "middle",
+  bordered = false,
+  striped = false,
+  onRow,
+  emptyText = "No data available",
+  searchable = false,
+  searchPlaceholder = "Search\u2026",
+  summary,
+  scroll,
+  title,
+  footer,
+  exportCsv = false,
+  exportFilename = "table-data"
 }) {
   const [sortKey, setSortKey] = useState(defaultSortKey);
   const [sortOrder, setSortOrder] = useState(defaultSortOrder);
+  const defaultPageSize = pagination !== false ? pagination?.pageSize ?? rowsPerPage : rowsPerPage;
   const [currentPage, setCurrentPage] = useState(1);
+  const [activePageSize, setActivePageSize] = useState(defaultPageSize);
+  const [searchText, setSearchText] = useState("");
+  const [activeFilters, setActiveFilters] = useState({});
+  const [openFilterKey, setOpenFilterKey] = useState(null);
+  const [internalSelectedKeys, setInternalSelectedKeys] = useState(rowSelection?.selectedRowKeys ?? []);
+  const selectedKeys = rowSelection?.selectedRowKeys ?? internalSelectedKeys;
+  const [expandedKeys, setExpandedKeys] = useState(
+    expandable?.defaultExpandedRowKeys ?? []
+  );
+  const effectiveExpandedKeys = expandable?.expandedRowKeys ?? expandedKeys;
+  const wrapperRef = useRef(null);
+  useEffect2(() => {
+    const onDown = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setOpenFilterKey(null);
+      }
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, []);
+  const filteredData = useMemo(() => {
+    let result = [...data];
+    if (searchable && searchText.trim()) {
+      const lower = searchText.trim().toLowerCase();
+      result = result.filter(
+        (row) => columns.some((col) => {
+          const val = getCellValue(row, col);
+          return val != null && String(val).toLowerCase().includes(lower);
+        })
+      );
+    }
+    Object.entries(activeFilters).forEach(([colKey, values]) => {
+      if (!values.length) return;
+      const col = columns.find((c) => c.key === colKey);
+      if (!col) return;
+      result = result.filter(
+        (row) => col.onFilter ? values.some((v) => col.onFilter(v, row)) : values.includes(getCellValue(row, col))
+      );
+    });
+    return result;
+  }, [data, searchText, searchable, activeFilters, columns]);
+  const sortedData = useMemo(() => {
+    if (!sortKey) return filteredData;
+    const col = columns.find((c) => c.key === sortKey);
+    if (!col) return filteredData;
+    return [...filteredData].sort((a, b) => {
+      const va = col.sortValue ? col.sortValue(a) : getCellValue(a, col);
+      const vb = col.sortValue ? col.sortValue(b) : getCellValue(b, col);
+      if (va == null && vb == null) return 0;
+      if (va == null) return sortOrder === "asc" ? -1 : 1;
+      if (vb == null) return sortOrder === "asc" ? 1 : -1;
+      if (typeof va === "number" && typeof vb === "number")
+        return sortOrder === "asc" ? va - vb : vb - va;
+      if (va instanceof Date && vb instanceof Date)
+        return sortOrder === "asc" ? va.getTime() - vb.getTime() : vb.getTime() - va.getTime();
+      const as = String(va).toLowerCase();
+      const bs = String(vb).toLowerCase();
+      return sortOrder === "asc" ? as.localeCompare(bs) : bs.localeCompare(as);
+    });
+  }, [filteredData, sortKey, sortOrder, columns]);
+  const showPagination = pagination !== false;
+  const paginationConfig = pagination !== false ? pagination : void 0;
+  const totalPages = Math.ceil(sortedData.length / activePageSize);
+  const paginatedData = useMemo(() => {
+    if (!showPagination) return sortedData;
+    const start = (currentPage - 1) * activePageSize;
+    return sortedData.slice(start, start + activePageSize);
+  }, [sortedData, currentPage, activePageSize, showPagination]);
+  useEffect2(() => {
+    if (currentPage > totalPages && totalPages > 0) setCurrentPage(totalPages);
+  }, [currentPage, totalPages]);
+  useEffect2(() => {
+    setCurrentPage(1);
+  }, [searchText, activeFilters]);
   const handleSort = (key, sortable) => {
     if (!sortable) return;
     if (sortKey === key) {
-      setSortOrder((prev) => prev === "asc" ? "desc" : "asc");
+      setSortOrder((p) => p === "asc" ? "desc" : "asc");
     } else {
       setSortKey(key);
       setSortOrder("asc");
     }
     setCurrentPage(1);
   };
-  const sortedData = useMemo(() => {
-    const copied = [...data];
-    if (!sortKey) return copied;
-    const column = columns.find((col) => col.key === sortKey);
-    if (!column) return copied;
-    copied.sort((a, b) => {
-      const valueA = column.sortValue ? column.sortValue(a) : a[sortKey];
-      const valueB = column.sortValue ? column.sortValue(b) : b[sortKey];
-      if (valueA == null && valueB == null) return 0;
-      if (valueA == null) return sortOrder === "asc" ? -1 : 1;
-      if (valueB == null) return sortOrder === "asc" ? 1 : -1;
-      if (typeof valueA === "number" && typeof valueB === "number") {
-        return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
-      }
-      if (valueA instanceof Date && valueB instanceof Date) {
-        return sortOrder === "asc" ? valueA.getTime() - valueB.getTime() : valueB.getTime() - valueA.getTime();
-      }
-      const aStr = String(valueA).toLowerCase();
-      const bStr = String(valueB).toLowerCase();
-      return sortOrder === "asc" ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
-    });
-    return copied;
-  }, [data, columns, sortKey, sortOrder]);
-  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * rowsPerPage;
-    return sortedData.slice(startIndex, startIndex + rowsPerPage);
-  }, [sortedData, currentPage, rowsPerPage]);
-  useEffect2(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
-  const getSortIndicator = (key, sortable) => {
-    if (!sortable) return null;
-    if (sortKey !== key) return /* @__PURE__ */ jsx20("span", { className: "text-xs opacity-50", children: "\u2195" });
-    return /* @__PURE__ */ jsx20("span", { className: "text-xs font-semibold", children: sortOrder === "asc" ? "\u2191" : "\u2193" });
+  const updateSelection = (next) => {
+    const nextRows = data.filter(
+      (row, i) => next.includes(getRowKey(row, rowKey, i))
+    );
+    rowSelection?.onChange?.(next, nextRows);
+    setInternalSelectedKeys(next);
   };
-  return /* @__PURE__ */ jsxs6(
-    "div",
-    {
-      className: `overflow-hidden rounded-xl border border-primary bg-primary text-primary shadow-sm ${className}`,
-      children: [
-        /* @__PURE__ */ jsx20("div", { className: "w-full overflow-x-auto", children: /* @__PURE__ */ jsxs6("table", { className: "min-w-max w-max border-collapse", children: [
-          /* @__PURE__ */ jsx20("thead", { children: /* @__PURE__ */ jsx20("tr", { className: "bg-primary", children: columns.map((col) => /* @__PURE__ */ jsx20(
-            "th",
-            {
-              onClick: () => handleSort(col.key, col.sortable),
-              className: `border-b border-primary px-4 py-3 text-left text-sm font-semibold text-primary sm:px-5 ${col.sortable ? "cursor-pointer select-none" : ""}`,
-              children: /* @__PURE__ */ jsxs6("div", { className: "flex items-center justify-between gap-2 whitespace-nowrap", children: [
-                /* @__PURE__ */ jsx20("span", { className: "whitespace-nowrap", children: col.title }),
-                getSortIndicator(col.key, col.sortable)
-              ] })
-            },
-            col.key
-          )) }) }),
-          /* @__PURE__ */ jsx20("tbody", { children: paginatedData.length === 0 ? /* @__PURE__ */ jsx20("tr", { children: /* @__PURE__ */ jsx20(
-            "td",
-            {
-              colSpan: columns.length,
-              className: "px-4 py-10 text-center text-sm text-primary sm:px-5",
-              children: "No data available"
-            }
-          ) }) : paginatedData.map((row, idx) => /* @__PURE__ */ jsx20(
-            "tr",
-            {
-              className: "border-b border-primary bg-primary text-primary transition-colors hover:bg-primary",
-              children: columns.map((col, colIdx) => /* @__PURE__ */ jsx20(
-                "td",
-                {
-                  className: `whitespace-nowrap px-4 py-4 text-sm align-middle text-primary sm:px-5 whitespace-nowrap ${colIdx === 0 ? "font-medium" : ""}`,
-                  children: col.render ? col.render(row, (currentPage - 1) * rowsPerPage + idx) : row[col.key]
-                },
-                col.key
-              ))
-            },
-            idx
-          )) })
-        ] }) }),
-        sortedData.length > rowsPerPage && /* @__PURE__ */ jsxs6("div", { className: "flex flex-col gap-3 border-t border-primary px-4 py-3 text-primary sm:flex-row sm:items-center sm:justify-between", children: [
-          /* @__PURE__ */ jsxs6("div", { className: "text-sm text-primary", children: [
-            "Showing ",
-            (currentPage - 1) * rowsPerPage + 1,
-            " to",
-            " ",
-            Math.min(currentPage * rowsPerPage, sortedData.length),
-            " of",
-            " ",
-            sortedData.length,
-            " entries"
-          ] }),
-          /* @__PURE__ */ jsxs6("div", { className: "flex items-center gap-2", children: [
-            /* @__PURE__ */ jsx20(
-              "button",
-              {
-                type: "button",
-                onClick: () => setCurrentPage((prev) => prev - 1),
-                disabled: currentPage === 1,
-                className: "rounded-md border border-primary bg-primary px-3 py-1.5 text-sm font-medium text-primary disabled:cursor-not-allowed disabled:opacity-50",
-                children: "Previous"
-              }
-            ),
-            /* @__PURE__ */ jsxs6("span", { className: "text-sm text-primary", children: [
-              "Page ",
-              currentPage,
-              " of ",
-              totalPages
-            ] }),
-            /* @__PURE__ */ jsx20(
-              "button",
-              {
-                type: "button",
-                onClick: () => setCurrentPage((prev) => prev + 1),
-                disabled: currentPage === totalPages,
-                className: "rounded-md border border-primary bg-primary px-3 py-1.5 text-sm font-medium text-primary disabled:cursor-not-allowed disabled:opacity-50",
-                children: "Next"
-              }
-            )
-          ] })
-        ] })
-      ]
+  const handleSelectAll = () => {
+    const pageKeys = paginatedData.map(
+      (row, idx) => getRowKey(row, rowKey, (currentPage - 1) * activePageSize + idx)
+    );
+    const allSelected = pageKeys.every((k) => selectedKeys.includes(k));
+    updateSelection(
+      allSelected ? selectedKeys.filter((k) => !pageKeys.includes(k)) : [.../* @__PURE__ */ new Set([...selectedKeys, ...pageKeys])]
+    );
+  };
+  const handleSelectRow = (row, absoluteIdx) => {
+    const key = getRowKey(row, rowKey, absoluteIdx);
+    if (rowSelection?.type === "radio") {
+      updateSelection([key]);
+    } else {
+      updateSelection(
+        selectedKeys.includes(key) ? selectedKeys.filter((k) => k !== key) : [...selectedKeys, key]
+      );
     }
+  };
+  const handleExpand = (row, key) => {
+    const isExpanded = effectiveExpandedKeys.includes(key);
+    expandable?.onExpand?.(!isExpanded, row);
+    if (!expandable?.expandedRowKeys) {
+      setExpandedKeys(
+        (prev) => isExpanded ? prev.filter((k) => k !== key) : [...prev, key]
+      );
+    }
+  };
+  const handleFilterApply = (colKey, values) => {
+    setActiveFilters((prev) => ({ ...prev, [colKey]: values }));
+    setOpenFilterKey(null);
+  };
+  const handleFilterReset = (colKey) => {
+    setActiveFilters((prev) => ({ ...prev, [colKey]: [] }));
+    setOpenFilterKey(null);
+  };
+  const handleExportCsv = () => {
+    const header = columns.map((c) => `"${String(c.title)}"`).join(",");
+    const rows = sortedData.map(
+      (row) => columns.map((col) => {
+        const raw = getCellValue(row, col);
+        return `"${raw != null ? String(raw).replace(/"/g, '""') : ""}"`;
+      }).join(",")
+    );
+    const blob = new Blob([[header, ...rows].join("\n")], {
+      type: "text/csv;charset=utf-8;"
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${exportFilename}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  const cellPad = SIZE_PADDING[size];
+  const hasSelect = !!rowSelection;
+  const hasExpand = !!expandable;
+  const allPageSelected = paginatedData.length > 0 && paginatedData.every(
+    (row, idx) => selectedKeys.includes(
+      getRowKey(row, rowKey, (currentPage - 1) * activePageSize + idx)
+    )
   );
+  const somePageSelected = !allPageSelected && paginatedData.some(
+    (row, idx) => selectedKeys.includes(
+      getRowKey(row, rowKey, (currentPage - 1) * activePageSize + idx)
+    )
+  );
+  const pageSizeOptions = paginationConfig?.pageSizeOptions ?? [10, 20, 50, 100];
+  const showSizeChanger = paginationConfig?.showSizeChanger ?? false;
+  const startEntry = sortedData.length === 0 ? 0 : (currentPage - 1) * activePageSize + 1;
+  const endEntry = Math.min(currentPage * activePageSize, sortedData.length);
+  const tableStyle = {};
+  if (scroll?.x) tableStyle.minWidth = scroll.x;
+  const sortIcon = (key, sortable) => {
+    if (!sortable) return null;
+    if (sortKey !== key)
+      return /* @__PURE__ */ jsx20("span", { className: "opacity-30 text-[11px]", children: "\u2195" });
+    return /* @__PURE__ */ jsx20("span", { className: "text-blue-500 text-[11px]", children: sortOrder === "asc" ? "\u2191" : "\u2193" });
+  };
+  const pageButtons = () => {
+    if (totalPages <= 1) return null;
+    const pages = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (currentPage > 3) pages.push("\u2026");
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++)
+        pages.push(i);
+      if (currentPage < totalPages - 2) pages.push("\u2026");
+      pages.push(totalPages);
+    }
+    return pages.map(
+      (p, i) => p === "\u2026" ? /* @__PURE__ */ jsx20("span", { className: "px-1 text-gray-400 text-sm", children: "\u2026" }, `ellipsis-${i}`) : /* @__PURE__ */ jsx20(
+        "button",
+        {
+          onClick: () => setCurrentPage(p),
+          className: `min-w-[30px] rounded px-2 py-1 text-sm font-medium transition-colors ${currentPage === p ? "bg-blue-500 text-white shadow-sm" : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50"}`,
+          children: p
+        },
+        p
+      )
+    );
+  };
+  return /* @__PURE__ */ jsxs6("div", { ref: wrapperRef, className: `flex flex-col gap-0 ${className}`, children: [
+    (searchable || exportCsv) && /* @__PURE__ */ jsxs6("div", { className: "flex items-center justify-between gap-3 mb-3 flex-wrap", children: [
+      /* @__PURE__ */ jsx20("div", { className: "flex-1" }),
+      /* @__PURE__ */ jsxs6("div", { className: "flex items-center gap-2", children: [
+        searchable && /* @__PURE__ */ jsxs6("div", { className: "relative", children: [
+          /* @__PURE__ */ jsx20(
+            "input",
+            {
+              type: "text",
+              value: searchText,
+              onChange: (e) => setSearchText(e.target.value),
+              placeholder: searchPlaceholder,
+              className: "rounded-lg border border-gray-200 bg-white pl-3 pr-7 py-1.5 text-sm text-gray-700 placeholder-gray-400 shadow-sm focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 w-52"
+            }
+          ),
+          searchText && /* @__PURE__ */ jsx20(
+            "button",
+            {
+              onClick: () => setSearchText(""),
+              className: "absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-base leading-none",
+              children: "\xD7"
+            }
+          )
+        ] }),
+        exportCsv && /* @__PURE__ */ jsx20(
+          "button",
+          {
+            onClick: handleExportCsv,
+            className: "rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-600 shadow-sm hover:bg-gray-50 transition-colors",
+            children: "\u2193 Export CSV"
+          }
+        )
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs6("div", { className: "relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm", children: [
+      loading && /* @__PURE__ */ jsx20(TableSpinner, {}),
+      title && /* @__PURE__ */ jsx20("div", { className: "border-b border-gray-100 px-4 py-3 text-sm font-medium text-gray-700", children: title() }),
+      /* @__PURE__ */ jsx20(
+        "div",
+        {
+          className: "w-full overflow-x-auto",
+          style: scroll?.y ? { maxHeight: scroll.y, overflowY: "auto" } : void 0,
+          children: /* @__PURE__ */ jsxs6(
+            "table",
+            {
+              className: `w-full border-collapse ${bordered ? "border border-gray-200" : ""}`,
+              style: tableStyle,
+              children: [
+                /* @__PURE__ */ jsx20("thead", { className: "sticky top-0 z-[1] bg-gray-50", children: /* @__PURE__ */ jsxs6("tr", { children: [
+                  hasExpand && /* @__PURE__ */ jsx20(
+                    "th",
+                    {
+                      className: `${cellPad} w-10 border-b border-gray-200 ${bordered ? "border-r border-gray-200" : ""}`
+                    }
+                  ),
+                  hasSelect && /* @__PURE__ */ jsx20(
+                    "th",
+                    {
+                      className: `${cellPad} w-10 text-center border-b border-gray-200 ${bordered ? "border-r border-gray-200" : ""}`,
+                      children: rowSelection?.type !== "radio" && /* @__PURE__ */ jsx20(
+                        "input",
+                        {
+                          type: "checkbox",
+                          checked: allPageSelected,
+                          ref: (el) => {
+                            if (el) el.indeterminate = somePageSelected;
+                          },
+                          onChange: handleSelectAll,
+                          className: "accent-blue-500 h-4 w-4 cursor-pointer"
+                        }
+                      )
+                    }
+                  ),
+                  columns.map((col) => /* @__PURE__ */ jsx20(
+                    "th",
+                    {
+                      onClick: () => handleSort(col.key, col.sortable),
+                      style: { width: col.width, textAlign: col.align ?? "left" },
+                      className: `border-b border-gray-200 ${cellPad} text-sm font-semibold text-gray-600 whitespace-nowrap select-none ${col.sortable ? "cursor-pointer hover:bg-gray-100 transition-colors" : ""} ${bordered ? "border-r border-gray-200 last:border-r-0" : ""}`,
+                      children: /* @__PURE__ */ jsxs6("div", { className: "relative flex items-center gap-1", children: [
+                        /* @__PURE__ */ jsx20("span", { children: col.title }),
+                        sortIcon(col.key, col.sortable),
+                        col.filters && /* @__PURE__ */ jsx20(
+                          "button",
+                          {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setOpenFilterKey(
+                                openFilterKey === col.key ? null : col.key
+                              );
+                            },
+                            className: `ml-auto text-xs rounded px-1 py-0.5 transition-colors ${activeFilters[col.key]?.length ? "text-blue-500 bg-blue-50" : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"}`,
+                            children: "\u25BC"
+                          }
+                        ),
+                        openFilterKey === col.key && col.filters && /* @__PURE__ */ jsx20(
+                          FilterDropdown,
+                          {
+                            filters: col.filters,
+                            activeValues: activeFilters[col.key] ?? [],
+                            multiple: col.filterMultiple !== false,
+                            onApply: (vals) => handleFilterApply(col.key, vals),
+                            onReset: () => handleFilterReset(col.key)
+                          }
+                        )
+                      ] })
+                    },
+                    col.key
+                  ))
+                ] }) }),
+                /* @__PURE__ */ jsx20("tbody", { children: paginatedData.length === 0 ? /* @__PURE__ */ jsx20("tr", { children: /* @__PURE__ */ jsx20(
+                  "td",
+                  {
+                    colSpan: columns.length + (hasSelect ? 1 : 0) + (hasExpand ? 1 : 0),
+                    className: "px-4 py-14 text-center text-sm text-gray-400",
+                    children: emptyText
+                  }
+                ) }) : paginatedData.map((row, idx) => {
+                  const absoluteIdx = (currentPage - 1) * activePageSize + idx;
+                  const key = getRowKey(row, rowKey, absoluteIdx);
+                  const isSelected = selectedKeys.includes(key);
+                  const isExpanded = effectiveExpandedKeys.includes(key);
+                  const rowProps = onRow?.(row, absoluteIdx);
+                  const canExpand = hasExpand && (expandable.rowExpandable ? expandable.rowExpandable(row) : true);
+                  const checkboxDisabled = rowSelection?.getCheckboxProps?.(row)?.disabled ?? false;
+                  let rowBg = "bg-white";
+                  if (isSelected) rowBg = "bg-blue-50";
+                  else if (striped && idx % 2 === 1) rowBg = "bg-gray-50/70";
+                  return /* @__PURE__ */ jsxs6(React4.Fragment, { children: [
+                    /* @__PURE__ */ jsxs6(
+                      "tr",
+                      {
+                        onClick: rowProps?.onClick,
+                        onDoubleClick: rowProps?.onDoubleClick,
+                        className: `border-b border-gray-100 transition-colors ${rowBg} ${rowProps?.onClick ? "cursor-pointer" : ""} hover:bg-blue-50/40 ${rowProps?.className ?? ""}`,
+                        children: [
+                          hasExpand && /* @__PURE__ */ jsx20(
+                            "td",
+                            {
+                              className: `${cellPad} text-center ${bordered ? "border-r border-gray-100" : ""}`,
+                              children: canExpand && /* @__PURE__ */ jsx20(
+                                "button",
+                                {
+                                  onClick: (e) => {
+                                    e.stopPropagation();
+                                    handleExpand(row, key);
+                                  },
+                                  style: {
+                                    transform: isExpanded ? "rotate(90deg)" : "none",
+                                    transition: "transform 0.15s",
+                                    display: "inline-block"
+                                  },
+                                  className: "text-gray-400 hover:text-gray-600 text-xs leading-none",
+                                  children: "\u25B6"
+                                }
+                              )
+                            }
+                          ),
+                          hasSelect && /* @__PURE__ */ jsx20(
+                            "td",
+                            {
+                              className: `${cellPad} text-center ${bordered ? "border-r border-gray-100" : ""}`,
+                              children: /* @__PURE__ */ jsx20(
+                                "input",
+                                {
+                                  type: rowSelection?.type === "radio" ? "radio" : "checkbox",
+                                  checked: isSelected,
+                                  disabled: checkboxDisabled,
+                                  onChange: () => handleSelectRow(row, absoluteIdx),
+                                  onClick: (e) => e.stopPropagation(),
+                                  className: "accent-blue-500 h-4 w-4 cursor-pointer disabled:cursor-not-allowed"
+                                }
+                              )
+                            }
+                          ),
+                          columns.map((col, colIdx) => {
+                            const value = getCellValue(row, col);
+                            return /* @__PURE__ */ jsx20(
+                              "td",
+                              {
+                                style: {
+                                  textAlign: col.align ?? "left",
+                                  width: col.width
+                                },
+                                className: `${cellPad} text-sm text-gray-700 align-middle ${colIdx === 0 && !hasSelect ? "font-medium" : ""} ${col.ellipsis ? "max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" : "whitespace-nowrap"} ${bordered ? "border-r border-gray-100 last:border-r-0" : ""}`,
+                                children: col.render ? col.render(value, row, absoluteIdx) : value
+                              },
+                              col.key
+                            );
+                          })
+                        ]
+                      }
+                    ),
+                    hasExpand && isExpanded && /* @__PURE__ */ jsx20("tr", { className: "bg-gray-50", children: /* @__PURE__ */ jsx20(
+                      "td",
+                      {
+                        colSpan: columns.length + (hasSelect ? 1 : 0) + 1,
+                        className: `${cellPad} border-b border-gray-100`,
+                        children: expandable.expandedRowRender(row, absoluteIdx)
+                      }
+                    ) })
+                  ] }, key);
+                }) }),
+                summary && sortedData.length > 0 && /* @__PURE__ */ jsx20("tfoot", { children: /* @__PURE__ */ jsx20("tr", { className: "bg-gray-50 font-medium", children: summary(sortedData) }) })
+              ]
+            }
+          )
+        }
+      ),
+      footer && /* @__PURE__ */ jsx20("div", { className: "border-t border-gray-100 px-4 py-2.5 text-sm text-gray-500", children: footer() })
+    ] }),
+    showPagination && sortedData.length > 0 && /* @__PURE__ */ jsxs6("div", { className: "mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between", children: [
+      /* @__PURE__ */ jsx20("div", { className: "text-sm text-gray-500", children: paginationConfig?.showTotal ? paginationConfig.showTotal(sortedData.length, [startEntry, endEntry]) : /* @__PURE__ */ jsxs6(Fragment, { children: [
+        "Showing",
+        " ",
+        /* @__PURE__ */ jsx20("span", { className: "font-medium text-gray-700", children: startEntry }),
+        " \u2013 ",
+        /* @__PURE__ */ jsx20("span", { className: "font-medium text-gray-700", children: endEntry }),
+        " of",
+        " ",
+        /* @__PURE__ */ jsx20("span", { className: "font-medium text-gray-700", children: sortedData.length }),
+        " ",
+        "entries",
+        selectedKeys.length > 0 && /* @__PURE__ */ jsxs6("span", { className: "ml-2 text-blue-500 font-medium", children: [
+          "(",
+          selectedKeys.length,
+          " selected)"
+        ] })
+      ] }) }),
+      /* @__PURE__ */ jsxs6("div", { className: "flex items-center gap-1.5 flex-wrap", children: [
+        showSizeChanger && /* @__PURE__ */ jsx20(
+          "select",
+          {
+            value: activePageSize,
+            onChange: (e) => {
+              setActivePageSize(Number(e.target.value));
+              setCurrentPage(1);
+            },
+            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-100 mr-2",
+            children: pageSizeOptions.map((opt) => /* @__PURE__ */ jsxs6("option", { value: opt, children: [
+              opt,
+              " / page"
+            ] }, opt))
+          }
+        ),
+        /* @__PURE__ */ jsx20(
+          "button",
+          {
+            onClick: () => setCurrentPage(1),
+            disabled: currentPage === 1,
+            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors",
+            children: "\xAB"
+          }
+        ),
+        /* @__PURE__ */ jsx20(
+          "button",
+          {
+            onClick: () => setCurrentPage((p) => p - 1),
+            disabled: currentPage === 1,
+            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors",
+            children: "\u2039"
+          }
+        ),
+        pageButtons(),
+        /* @__PURE__ */ jsx20(
+          "button",
+          {
+            onClick: () => setCurrentPage((p) => p + 1),
+            disabled: currentPage === totalPages || totalPages === 0,
+            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors",
+            children: "\u203A"
+          }
+        ),
+        /* @__PURE__ */ jsx20(
+          "button",
+          {
+            onClick: () => setCurrentPage(totalPages),
+            disabled: currentPage === totalPages || totalPages === 0,
+            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors",
+            children: "\xBB"
+          }
+        )
+      ] })
+    ] })
+  ] });
 }
 
 // src/components/Tabs/ZestTab.tsx

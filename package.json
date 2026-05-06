@@ -1,11 +1,20 @@
 {
   "name": "zest-web-ui",
-  "version": "1.0.0",
-  "description": "Reusable UI components for React",
+  "version": "1.1.0",
+  "description": "Production-ready React UI components styled with Tailwind CSS — tables, buttons, modals, inputs and more.",
   "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --external react --external react-dom",
@@ -14,10 +23,24 @@
   "keywords": [
     "react",
     "ui",
-    "components"
+    "components",
+    "tailwind",
+    "table",
+    "data-table",
+    "modal",
+    "button",
+    "input",
+    "select",
+    "tabs",
+    "spinner",
+    "alert",
+    "zest",
+    "component-library",
+    "typescript",
+    "nextjs"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "PulseZest Innovation <deepanshu@pulsezest.com>",
+  "license": "MIT",
   "type": "module",
   "sideEffects": false,
   "repository": {
@@ -32,6 +55,7 @@
     "access": "public"
   },
   "peerDependencies": {
+    "react": ">=18",
     "react-dom": ">=18"
   },
   "devDependencies": {
