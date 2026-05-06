@@ -222,14 +222,14 @@ function FilterDropdown({
 
   return (
     <div
-      className="absolute z-50 top-full left-0 mt-1 min-w-[160px] rounded-lg border border-gray-200 bg-white shadow-lg text-sm text-gray-700"
+      className="absolute z-50 top-full left-0 mt-1 min-w-[160px] rounded-lg border border-gray-200 bg-white shadow-lg text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
       onClick={(e) => e.stopPropagation()}
     >
       <div className="max-h-52 overflow-y-auto p-2 space-y-0.5">
         {filters.map((f) => (
           <label
             key={String(f.value)}
-            className="flex items-center gap-2 cursor-pointer px-2 py-1.5 rounded hover:bg-gray-50"
+            className="flex items-center gap-2 cursor-pointer px-2 py-1.5 rounded hover:bg-gray-50 dark:hover:bg-gray-700/60"
           >
             <input
               type={multiple ? "checkbox" : "radio"}
@@ -241,19 +241,19 @@ function FilterDropdown({
           </label>
         ))}
       </div>
-      <div className="flex justify-between border-t border-gray-100 px-2 py-1.5 gap-2">
+      <div className="flex justify-between border-t border-gray-100 px-2 py-1.5 gap-2 dark:border-gray-700">
         <button
           onClick={() => {
             setSelected([]);
             onReset();
           }}
-          className="text-xs text-gray-400 hover:text-gray-600"
+          className="text-xs text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
         >
           Reset
         </button>
         <button
           onClick={() => onApply(selected)}
-          className="rounded bg-blue-500 px-2.5 py-1 text-xs text-white hover:bg-blue-600"
+          className="rounded bg-blue-500 px-2.5 py-1 text-xs text-white hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500"
         >
           OK
         </button>
@@ -266,9 +266,9 @@ function FilterDropdown({
 
 function TableSpinner() {
   return (
-    <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px] rounded-xl">
+    <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px] rounded-xl dark:bg-gray-900/70">
       <svg
-        className="h-8 w-8 animate-spin text-blue-500"
+        className="h-8 w-8 animate-spin text-blue-500 dark:text-blue-400"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -563,12 +563,12 @@ export function ZestTable<T = any>({
     if (!sortable) return null;
     if (sortKey !== key)
       return (
-        <span className="opacity-30 text-[11px]">
+        <span className="opacity-30 text-[11px] dark:opacity-40">
           ↕
         </span>
       );
     return (
-      <span className="text-blue-500 text-[11px]">
+      <span className="text-blue-500 text-[11px] dark:text-blue-400">
         {sortOrder === "asc" ? "↑" : "↓"}
       </span>
     );
@@ -596,7 +596,7 @@ export function ZestTable<T = any>({
 
     return pages.map((p, i) =>
       p === "…" ? (
-        <span key={`ellipsis-${i}`} className="px-1 text-gray-400 text-sm">
+        <span key={`ellipsis-${i}`} className="px-1 text-gray-400 text-sm dark:text-gray-500">
           …
         </span>
       ) : (
@@ -605,8 +605,8 @@ export function ZestTable<T = any>({
           onClick={() => setCurrentPage(p as number)}
           className={`min-w-[30px] rounded px-2 py-1 text-sm font-medium transition-colors ${
             currentPage === p
-              ? "bg-blue-500 text-white shadow-sm"
-              : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+              ? "bg-blue-500 text-white shadow-sm dark:bg-blue-600"
+              : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
           }`}
         >
           {p}
@@ -630,12 +630,12 @@ export function ZestTable<T = any>({
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
                   placeholder={searchPlaceholder}
-                  className="rounded-lg border border-gray-200 bg-white pl-3 pr-7 py-1.5 text-sm text-gray-700 placeholder-gray-400 shadow-sm focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 w-52"
+                  className="rounded-lg border border-gray-200 bg-white pl-3 pr-7 py-1.5 text-sm text-gray-700 placeholder-gray-400 shadow-sm focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 w-52 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-500 dark:focus:border-blue-500 dark:focus:ring-blue-900/30"
                 />
                 {searchText && (
                   <button
                     onClick={() => setSearchText("")}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-base leading-none"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-base leading-none dark:text-gray-500 dark:hover:text-gray-300"
                   >
                     ×
                   </button>
@@ -645,7 +645,7 @@ export function ZestTable<T = any>({
             {exportCsv && (
               <button
                 onClick={handleExportCsv}
-                className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-600 shadow-sm hover:bg-gray-50 transition-colors"
+                className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-600 shadow-sm hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 ↓ Export CSV
               </button>
@@ -655,12 +655,12 @@ export function ZestTable<T = any>({
       )}
 
       {/* ── Card ────────────────────────────────────────────────────────────── */}
-      <div className="relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
         {loading && <TableSpinner />}
 
         {/* Optional table title */}
         {title && (
-          <div className="border-b border-gray-100 px-4 py-3 text-sm font-medium text-gray-700">
+          <div className="border-b border-gray-100 px-4 py-3 text-sm font-medium text-gray-700 dark:border-gray-800 dark:text-gray-200">
             {title()}
           </div>
         )}
@@ -671,24 +671,24 @@ export function ZestTable<T = any>({
           style={scroll?.y ? { maxHeight: scroll.y, overflowY: "auto" } : undefined}
         >
           <table
-            className={`w-full border-collapse ${bordered ? "border border-gray-200" : ""}`}
+            className={`w-full border-collapse ${bordered ? "border border-gray-200 dark:border-gray-700" : ""}`}
             style={tableStyle}
           >
             {/* ── Head ──────────────────────────────────────────────────────── */}
-            <thead className="sticky top-0 z-[1] bg-gray-50">
+            <thead className="sticky top-0 z-[1] bg-gray-50 dark:bg-gray-800">
               <tr>
                 {hasExpand && (
                   <th
-                    className={`${cellPad} w-10 border-b border-gray-200 ${
-                      bordered ? "border-r border-gray-200" : ""
+                    className={`${cellPad} w-10 border-b border-gray-200 dark:border-gray-700 ${
+                      bordered ? "border-r border-gray-200 dark:border-gray-700" : ""
                     }`}
                   />
                 )}
 
                 {hasSelect && (
                   <th
-                    className={`${cellPad} w-10 text-center border-b border-gray-200 ${
-                      bordered ? "border-r border-gray-200" : ""
+                    className={`${cellPad} w-10 text-center border-b border-gray-200 dark:border-gray-700 ${
+                      bordered ? "border-r border-gray-200 dark:border-gray-700" : ""
                     }`}
                   >
                     {rowSelection?.type !== "radio" && (
@@ -710,11 +710,11 @@ export function ZestTable<T = any>({
                     key={col.key}
                     onClick={() => handleSort(col.key, col.sortable)}
                     style={{ width: col.width, textAlign: col.align ?? "left" }}
-                    className={`border-b border-gray-200 ${cellPad} text-sm font-semibold text-gray-600 whitespace-nowrap select-none ${
+                    className={`border-b border-gray-200 dark:border-gray-700 ${cellPad} text-sm font-semibold text-gray-600 whitespace-nowrap select-none dark:text-gray-400 ${
                       col.sortable
-                        ? "cursor-pointer hover:bg-gray-100 transition-colors"
+                        ? "cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                         : ""
-                    } ${bordered ? "border-r border-gray-200 last:border-r-0" : ""}`}
+                    } ${bordered ? "border-r border-gray-200 dark:border-gray-700 last:border-r-0" : ""}`}
                   >
                     <div className="relative flex items-center gap-1">
                       <span>{col.title}</span>
@@ -730,8 +730,8 @@ export function ZestTable<T = any>({
                           }}
                           className={`ml-auto text-xs rounded px-1 py-0.5 transition-colors ${
                             activeFilters[col.key]?.length
-                              ? "text-blue-500 bg-blue-50"
-                              : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+                              ? "text-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400"
+                              : "text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-500 dark:hover:text-gray-300 dark:hover:bg-gray-700"
                           }`}
                         >
                           ▼
@@ -763,7 +763,7 @@ export function ZestTable<T = any>({
                       (hasSelect ? 1 : 0) +
                       (hasExpand ? 1 : 0)
                     }
-                    className="px-4 py-14 text-center text-sm text-gray-400"
+                    className="px-4 py-14 text-center text-sm text-gray-400 dark:text-gray-500"
                   >
                     {emptyText}
                   </td>
@@ -784,24 +784,24 @@ export function ZestTable<T = any>({
                   const checkboxDisabled =
                     rowSelection?.getCheckboxProps?.(row)?.disabled ?? false;
 
-                  let rowBg = "bg-white";
-                  if (isSelected) rowBg = "bg-blue-50";
-                  else if (striped && idx % 2 === 1) rowBg = "bg-gray-50/70";
+                  let rowBg = "bg-white dark:bg-gray-900";
+                  if (isSelected) rowBg = "bg-blue-50 dark:bg-blue-900/30";
+                  else if (striped && idx % 2 === 1) rowBg = "bg-gray-50/70 dark:bg-gray-800/50";
 
                   return (
                     <React.Fragment key={key}>
                       <tr
                         onClick={rowProps?.onClick}
                         onDoubleClick={rowProps?.onDoubleClick}
-                        className={`border-b border-gray-100 transition-colors ${rowBg} ${
+                        className={`border-b border-gray-100 transition-colors dark:border-gray-800 ${rowBg} ${
                           rowProps?.onClick ? "cursor-pointer" : ""
-                        } hover:bg-blue-50/40 ${rowProps?.className ?? ""}`}
+                        } hover:bg-blue-50/40 dark:hover:bg-blue-900/20 ${rowProps?.className ?? ""}`}
                       >
                         {/* Expand toggle */}
                         {hasExpand && (
                           <td
                             className={`${cellPad} text-center ${
-                              bordered ? "border-r border-gray-100" : ""
+                              bordered ? "border-r border-gray-100 dark:border-gray-800" : ""
                             }`}
                           >
                             {canExpand && (
@@ -817,7 +817,7 @@ export function ZestTable<T = any>({
                                   transition: "transform 0.15s",
                                   display: "inline-block",
                                 }}
-                                className="text-gray-400 hover:text-gray-600 text-xs leading-none"
+                                className="text-gray-400 hover:text-gray-600 text-xs leading-none dark:text-gray-500 dark:hover:text-gray-300"
                               >
                                 ▶
                               </button>
@@ -829,7 +829,7 @@ export function ZestTable<T = any>({
                         {hasSelect && (
                           <td
                             className={`${cellPad} text-center ${
-                              bordered ? "border-r border-gray-100" : ""
+                              bordered ? "border-r border-gray-100 dark:border-gray-800" : ""
                             }`}
                           >
                             <input
@@ -859,7 +859,7 @@ export function ZestTable<T = any>({
                                 textAlign: col.align ?? "left",
                                 width: col.width,
                               }}
-                              className={`${cellPad} text-sm text-gray-700 align-middle ${
+                              className={`${cellPad} text-sm text-gray-700 align-middle dark:text-gray-200 ${
                                 colIdx === 0 && !hasSelect ? "font-medium" : ""
                               } ${
                                 col.ellipsis
@@ -867,7 +867,7 @@ export function ZestTable<T = any>({
                                   : "whitespace-nowrap"
                               } ${
                                 bordered
-                                  ? "border-r border-gray-100 last:border-r-0"
+                                  ? "border-r border-gray-100 last:border-r-0 dark:border-gray-800"
                                   : ""
                               }`}
                             >
@@ -881,14 +881,14 @@ export function ZestTable<T = any>({
 
                       {/* Expanded row content */}
                       {hasExpand && isExpanded && (
-                        <tr className="bg-gray-50">
+                        <tr className="bg-gray-50 dark:bg-gray-800">
                           <td
                             colSpan={
                               columns.length +
                               (hasSelect ? 1 : 0) +
                               1
                             }
-                            className={`${cellPad} border-b border-gray-100`}
+                            className={`${cellPad} border-b border-gray-100 dark:border-gray-700 dark:text-gray-300`}
                           >
                             {expandable!.expandedRowRender(row, absoluteIdx)}
                           </td>
@@ -903,7 +903,7 @@ export function ZestTable<T = any>({
             {/* ── Summary ───────────────────────────────────────────────────── */}
             {summary && sortedData.length > 0 && (
               <tfoot>
-                <tr className="bg-gray-50 font-medium">
+                <tr className="bg-gray-50 font-medium dark:bg-gray-800 dark:text-gray-200">
                   {summary(sortedData)}
                 </tr>
               </tfoot>
@@ -913,7 +913,7 @@ export function ZestTable<T = any>({
 
         {/* Optional table footer */}
         {footer && (
-          <div className="border-t border-gray-100 px-4 py-2.5 text-sm text-gray-500">
+          <div className="border-t border-gray-100 px-4 py-2.5 text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400">
             {footer()}
           </div>
         )}
@@ -923,16 +923,16 @@ export function ZestTable<T = any>({
       {showPagination && sortedData.length > 0 && (
         <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           {/* Entry info */}
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-gray-500 dark:text-gray-400">
             {paginationConfig?.showTotal ? (
               paginationConfig.showTotal(sortedData.length, [startEntry, endEntry])
             ) : (
               <>
                 Showing{" "}
-                <span className="font-medium text-gray-700">{startEntry}</span>
+                <span className="font-medium text-gray-700 dark:text-gray-200">{startEntry}</span>
                 {" – "}
-                <span className="font-medium text-gray-700">{endEntry}</span> of{" "}
-                <span className="font-medium text-gray-700">
+                <span className="font-medium text-gray-700 dark:text-gray-200">{endEntry}</span> of{" "}
+                <span className="font-medium text-gray-700 dark:text-gray-200">
                   {sortedData.length}
                 </span>{" "}
                 entries
@@ -954,7 +954,7 @@ export function ZestTable<T = any>({
                   setActivePageSize(Number(e.target.value));
                   setCurrentPage(1);
                 }}
-                className="rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-100 mr-2"
+                className="rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-100 mr-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:focus:ring-blue-900/30"
               >
                 {pageSizeOptions.map((opt) => (
                   <option key={opt} value={opt}>
@@ -967,14 +967,14 @@ export function ZestTable<T = any>({
             <button
               onClick={() => setCurrentPage(1)}
               disabled={currentPage === 1}
-              className="rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              className="rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               «
             </button>
             <button
               onClick={() => setCurrentPage((p) => p - 1)}
               disabled={currentPage === 1}
-              className="rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              className="rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               ‹
             </button>
@@ -984,14 +984,14 @@ export function ZestTable<T = any>({
             <button
               onClick={() => setCurrentPage((p) => p + 1)}
               disabled={currentPage === totalPages || totalPages === 0}
-              className="rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              className="rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               ›
             </button>
             <button
               onClick={() => setCurrentPage(totalPages)}
               disabled={currentPage === totalPages || totalPages === 0}
-              className="rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              className="rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               »
             </button>

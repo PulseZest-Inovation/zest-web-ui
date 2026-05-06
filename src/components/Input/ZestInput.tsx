@@ -13,21 +13,7 @@ export const ZestInput: React.FC<ZestInputProps> = ({
   return (
     <input
       {...props}
-      className={`px-3 py-1.5 border border-gray-300 rounded-lg w-80 text-primary focus:outline-none focus:ring-2 focus:ring-blue-400 transition ${className}`}
+      className={`px-3 py-1.5 border border-gray-300 rounded-lg w-80 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 ${className}`}
     />
   );
 };
-
-
-// Usage:
-{/* <div className="flex items-center gap-3">
-  <ZestInputTitle htmlFor="email" required>
-    Email
-  </ZestInputTitle>
-
-  <ZestInput
-    id="email"
-    type="email"
-    placeholder="Enter email"
-  />
-</div> */}

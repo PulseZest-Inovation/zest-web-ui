@@ -34,6 +34,54 @@ module.exports = {
 };
 ```
 
+### Dark mode
+
+All components support Tailwind's **class-based dark mode**. Enable it in your Tailwind config:
+
+```js
+// tailwind.config.js
+module.exports = {
+  darkMode: "class", // ← required
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/zest-web-ui/dist/**/*.{js,cjs}",
+  ],
+};
+```
+
+Then add the `dark` class to your root `<html>` element to activate dark mode:
+
+```html
+<!-- light -->
+<html>...</html>
+
+<!-- dark -->
+<html class="dark">...</html>
+```
+
+In Next.js you can toggle it with `next-themes`:
+
+```bash
+npm install next-themes
+```
+
+```tsx
+// app/layout.tsx
+import { ThemeProvider } from "next-themes";
+
+export default function RootLayout({ children }) {
+  return (
+    <html suppressHydrationWarning>
+      <body>
+        <ThemeProvider attribute="class" defaultTheme="system">
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
+```
+
 ---
 
 ## Components

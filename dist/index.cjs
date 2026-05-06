@@ -59,18 +59,20 @@ module.exports = __toCommonJS(index_exports);
 // src/components/Text/ZestBadge.tsx
 var import_jsx_runtime = require("react/jsx-runtime");
 function ZestBadge({ children, className = "" }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 ${className}`, children });
-}
-{
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    "span",
+    {
+      className: `px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 ${className}`,
+      children
+    }
+  );
 }
 
 // src/components/Text/ZestHeading.tsx
 var import_jsx_runtime2 = require("react/jsx-runtime");
 function ZestHeading({ children, level = 2, className = "" }) {
   const Tag = `h${level}`;
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Tag, { className: `font-bold ${className}`, children });
-}
-{
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Tag, { className: `font-bold text-gray-900 dark:text-gray-100 ${className}`, children });
 }
 
 // src/components/Text/ZestLabel.tsx
@@ -80,38 +82,25 @@ function ZestLabel({ htmlFor, children, className = "" }) {
     "label",
     {
       htmlFor,
-      className: `text-sm font-medium text-primary ${className}`,
+      className: `text-sm font-medium text-gray-700 dark:text-gray-300 ${className}`,
       children
     }
   );
-}
-{
 }
 
 // src/components/Text/ZestText.tsx
 var import_jsx_runtime4 = require("react/jsx-runtime");
 function ZestText({ children, className = "" }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: `text-primary ${className}`, children });
-}
-{
-}
-{
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: `text-gray-700 dark:text-gray-300 ${className}`, children });
 }
 
 // src/components/Text/ZestTitle.tsx
 var import_jsx_runtime5 = require("react/jsx-runtime");
-function ZestTitle({
-  children,
-  icon,
-  className = "",
-  as: Tag = "h2"
-}) {
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: `flex items-center gap-2 mb-6 text-primary ${className}`, children: [
+function ZestTitle({ children, icon, className = "", as: Tag = "h2" }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: `flex items-center gap-2 mb-6 text-gray-900 dark:text-gray-100 ${className}`, children: [
     icon && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { className: "flex items-center", children: icon }),
     /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Tag, { className: "text-2xl font-bold", children })
   ] });
-}
-{
 }
 
 // src/components/Text/ZestInputTitle.tsx
@@ -126,7 +115,7 @@ var ZestInputTitle = ({
     "label",
     {
       htmlFor,
-      className: `w-40 text-sm font-medium text-primary ${className}`,
+      className: `w-40 text-sm font-medium text-gray-700 dark:text-gray-300 ${className}`,
       children: [
         children,
         required && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "text-red-500 ml-1", children: "*" })
@@ -147,17 +136,17 @@ function ZestButton({
   ...props
 }) {
   const variantStyles = {
-    primary: "bg-blue-600 text-white border-blue-600",
-    outline: "border-blue-600 text-blue-600",
-    ghost: "border-transparent text-blue-600",
-    theme: "bg-primary text-primary border-primary"
+    primary: "bg-blue-600 text-white border-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:border-blue-500 dark:hover:bg-blue-600",
+    outline: "border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900/20",
+    ghost: "border-transparent text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20",
+    theme: "bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700"
   };
   return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
     "button",
     {
       ...props,
       disabled: disabled || loading,
-      className: `px-4 py-2 rounded-lg border-2 hover:scale-105 focus:outline-none cursor-pointer focus:ring-2 focus:ring-blue-400 transition-transform duration-200 flex items-center gap-2 ${variantStyles[variant]} ${className}`,
+      className: `px-4 py-2 rounded-lg border-2 hover:scale-105 focus:outline-none cursor-pointer focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-transform duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${variantStyles[variant]} ${className}`,
       children: [
         loading && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "animate-spin", children: "\u23F3" }),
         !loading && icon && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "flex items-center", children: icon }),
@@ -165,8 +154,6 @@ function ZestButton({
       ]
     }
   );
-}
-{
 }
 
 // src/components/Button/ZestFloatingButton.tsx
@@ -176,12 +163,10 @@ function ZestFloatingButton({ icon, onClick }) {
     "button",
     {
       onClick,
-      className: "fixed bottom-6 right-6 w-14 h-14 rounded-full bg-primary text-white shadow-lg flex items-center justify-center",
+      className: "fixed bottom-6 right-6 w-14 h-14 rounded-full bg-blue-600 text-white shadow-lg flex items-center justify-center hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600",
       children: icon
     }
   );
-}
-{
 }
 
 // src/components/Button/ZestIconButton.tsx
@@ -191,12 +176,10 @@ function ZestIconButton({ icon, className = "", ...props }) {
     "button",
     {
       ...props,
-      className: `p-2 rounded-lg border hover:scale-105 transition ${className}`,
+      className: `p-2 rounded-lg border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 hover:scale-105 transition dark:border-gray-700 dark:text-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 ${className}`,
       children: icon
     }
   );
-}
-{
 }
 
 // src/components/Button/ZestLinkButton.tsx
@@ -207,12 +190,10 @@ function ZestLinkButton({ href, children, className = "", ...props }) {
     {
       href,
       ...props,
-      className: `px-4 py-2 rounded-lg text-blue-600 hover:underline ${className}`,
+      className: `px-4 py-2 rounded-lg text-blue-600 hover:underline hover:text-blue-700 transition-colors dark:text-blue-400 dark:hover:text-blue-300 ${className}`,
       children
     }
   );
-}
-{
 }
 
 // src/components/Button/ZestToggleButton.tsx
@@ -224,18 +205,16 @@ function ZestToggleButton({ children }) {
     "button",
     {
       onClick: () => setActive(!active),
-      className: `px-4 py-2 rounded-lg border ${active ? "bg-primary text-white" : ""}`,
+      className: `px-4 py-2 rounded-lg border-2 transition-colors duration-200 font-medium ${active ? "bg-blue-600 text-white border-blue-600 dark:bg-blue-500 dark:border-blue-500" : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700"}`,
       children
     }
   );
-}
-{
 }
 
 // src/components/Divider/ZestDivider.tsx
 var import_jsx_runtime12 = require("react/jsx-runtime");
 function ZestDivider() {
-  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("hr", { className: "border-gray-200 my-4" });
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("hr", { className: "border-gray-200 my-4 dark:border-gray-700" });
 }
 
 // src/components/Alert/AlertProvider.tsx
@@ -276,25 +255,18 @@ function useAlert() {
   if (!ctx) throw new Error("useAlert must be used within an AlertProvider");
   return ctx;
 }
-var ZestAlertGlobal = ({ open, type, message, duration }) => {
+var typeStyles = {
+  success: "bg-green-100 text-green-800 border-green-400 dark:bg-green-900/40 dark:text-green-300 dark:border-green-700",
+  error: "bg-red-100 text-red-800 border-red-400 dark:bg-red-900/40 dark:text-red-300 dark:border-red-700",
+  warning: "bg-yellow-100 text-yellow-800 border-yellow-400 dark:bg-yellow-900/40 dark:text-yellow-300 dark:border-yellow-600",
+  info: "bg-blue-100 text-blue-800 border-blue-400 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-700"
+};
+var ZestAlertGlobal = ({ open, type, message }) => {
   if (!open || !message) return null;
-  const typeStyles = {
-    success: "bg-green-100 text-green-700 border-green-400",
-    error: "bg-red-100 text-red-700 border-red-400",
-    warning: "bg-yellow-100 text-yellow-700 border-yellow-400",
-    info: "bg-blue-100 text-blue-700 border-blue-400"
-  };
   return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
     "div",
     {
-      className: `fixed top-0 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-fit px-4 py-2 rounded-lg border-2 shadow-lg transition-all duration-300 ${typeStyles[type]}`,
-      style: {
-        pointerEvents: "auto",
-        background: "#fffbe6",
-        // fallback for visibility
-        color: "#222",
-        border: "2px solid #facc15"
-      },
+      className: `fixed top-4 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-fit px-4 py-2.5 rounded-lg border-2 shadow-lg text-sm font-medium transition-all duration-300 ${typeStyles[type]}`,
       children: message
     }
   );
@@ -311,12 +283,10 @@ var ZestInput = ({
     "input",
     {
       ...props,
-      className: `px-3 py-1.5 border border-gray-300 rounded-lg w-80 text-primary focus:outline-none focus:ring-2 focus:ring-blue-400 transition ${className}`
+      className: `px-3 py-1.5 border border-gray-300 rounded-lg w-80 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 ${className}`
     }
   );
 };
-{
-}
 
 // src/components/Selector/ZestSelector.tsx
 var import_jsx_runtime15 = require("react/jsx-runtime");
@@ -333,7 +303,7 @@ var ZestSelector = ({
     {
       ...props,
       value: value ?? "",
-      className: `px-3 py-1.5 border w-80 border-gray-300 rounded-lg text-primary bg-primary focus:outline-none focus:ring-2 focus:ring-blue-400 transition ${className}`,
+      className: `px-3 py-1.5 border w-80 border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:focus:ring-blue-500 dark:focus:border-blue-500 ${className}`,
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: "", disabled: true, children: placeholder }),
         options.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: opt.value, children: opt.label }, opt.value))
@@ -384,17 +354,13 @@ var ZestModal = ({
   return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
     "div",
     {
-      className: `fixed inset-0 z-50 flex items-center justify-center bg-black/40 ${overlayClassName}`,
+      className: `fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70 ${overlayClassName}`,
       onClick: onClose,
       children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
         "div",
         {
-          className: `bg-primary rounded-lg shadow-lg w-full ${widthClass} ${className}`,
-          style: {
-            ...style,
-            maxWidth: "700px",
-            minWidth: "320px"
-          },
+          className: `bg-white rounded-lg shadow-xl w-full border border-gray-200 dark:bg-gray-900 dark:border-gray-700 ${widthClass} ${className}`,
+          style: { ...style, maxWidth: "700px", minWidth: "320px" },
           onClick: (e) => e.stopPropagation(),
           children
         }
@@ -405,29 +371,32 @@ var ZestModal = ({
 
 // src/components/Modal/ZestModalBody.tsx
 var import_jsx_runtime17 = require("react/jsx-runtime");
-var ZestModalBody = ({
-  children,
-  className = ""
-}) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: `p-4 ${className}`, children });
+var ZestModalBody = ({ children, className = "" }) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: `p-4 text-gray-700 dark:text-gray-300 ${className}`, children });
 };
 
 // src/components/Modal/ZestModalFooter.tsx
 var import_jsx_runtime18 = require("react/jsx-runtime");
-var ZestModalFooter = ({
-  children,
-  className = ""
-}) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: `flex justify-end gap-2 p-4 border-t ${className}`, children });
+var ZestModalFooter = ({ children, className = "" }) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+    "div",
+    {
+      className: `flex justify-end gap-2 p-4 border-t border-gray-200 dark:border-gray-700 ${className}`,
+      children
+    }
+  );
 };
 
 // src/components/Modal/ZestModalHeader.tsx
 var import_jsx_runtime19 = require("react/jsx-runtime");
-var ZestModalHeader = ({
-  children,
-  className = ""
-}) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: `flex items-center justify-between p-4 border-b ${className}`, children });
+var ZestModalHeader = ({ children, className = "" }) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+    "div",
+    {
+      className: `flex items-center justify-between p-4 border-b border-gray-200 text-gray-900 dark:border-gray-700 dark:text-gray-100 ${className}`,
+      children
+    }
+  );
 };
 
 // src/components/Table/ZestTable.tsx
@@ -466,13 +435,13 @@ function FilterDropdown({
   return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
     "div",
     {
-      className: "absolute z-50 top-full left-0 mt-1 min-w-[160px] rounded-lg border border-gray-200 bg-white shadow-lg text-sm text-gray-700",
+      className: "absolute z-50 top-full left-0 mt-1 min-w-[160px] rounded-lg border border-gray-200 bg-white shadow-lg text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200",
       onClick: (e) => e.stopPropagation(),
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "max-h-52 overflow-y-auto p-2 space-y-0.5", children: filters.map((f) => /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
           "label",
           {
-            className: "flex items-center gap-2 cursor-pointer px-2 py-1.5 rounded hover:bg-gray-50",
+            className: "flex items-center gap-2 cursor-pointer px-2 py-1.5 rounded hover:bg-gray-50 dark:hover:bg-gray-700/60",
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                 "input",
@@ -488,7 +457,7 @@ function FilterDropdown({
           },
           String(f.value)
         )) }),
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex justify-between border-t border-gray-100 px-2 py-1.5 gap-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex justify-between border-t border-gray-100 px-2 py-1.5 gap-2 dark:border-gray-700", children: [
           /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
             "button",
             {
@@ -496,7 +465,7 @@ function FilterDropdown({
                 setSelected([]);
                 onReset();
               },
-              className: "text-xs text-gray-400 hover:text-gray-600",
+              className: "text-xs text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300",
               children: "Reset"
             }
           ),
@@ -504,7 +473,7 @@ function FilterDropdown({
             "button",
             {
               onClick: () => onApply(selected),
-              className: "rounded bg-blue-500 px-2.5 py-1 text-xs text-white hover:bg-blue-600",
+              className: "rounded bg-blue-500 px-2.5 py-1 text-xs text-white hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500",
               children: "OK"
             }
           )
@@ -514,10 +483,10 @@ function FilterDropdown({
   );
 }
 function TableSpinner() {
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px] rounded-xl", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px] rounded-xl dark:bg-gray-900/70", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
     "svg",
     {
-      className: "h-8 w-8 animate-spin text-blue-500",
+      className: "h-8 w-8 animate-spin text-blue-500 dark:text-blue-400",
       xmlns: "http://www.w3.org/2000/svg",
       fill: "none",
       viewBox: "0 0 24 24",
@@ -742,8 +711,8 @@ function ZestTable({
   const sortIcon = (key, sortable) => {
     if (!sortable) return null;
     if (sortKey !== key)
-      return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "opacity-30 text-[11px]", children: "\u2195" });
-    return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "text-blue-500 text-[11px]", children: sortOrder === "asc" ? "\u2191" : "\u2193" });
+      return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "opacity-30 text-[11px] dark:opacity-40", children: "\u2195" });
+    return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "text-blue-500 text-[11px] dark:text-blue-400", children: sortOrder === "asc" ? "\u2191" : "\u2193" });
   };
   const pageButtons = () => {
     if (totalPages <= 1) return null;
@@ -759,11 +728,11 @@ function ZestTable({
       pages.push(totalPages);
     }
     return pages.map(
-      (p, i) => p === "\u2026" ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "px-1 text-gray-400 text-sm", children: "\u2026" }, `ellipsis-${i}`) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+      (p, i) => p === "\u2026" ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "px-1 text-gray-400 text-sm dark:text-gray-500", children: "\u2026" }, `ellipsis-${i}`) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
         "button",
         {
           onClick: () => setCurrentPage(p),
-          className: `min-w-[30px] rounded px-2 py-1 text-sm font-medium transition-colors ${currentPage === p ? "bg-blue-500 text-white shadow-sm" : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50"}`,
+          className: `min-w-[30px] rounded px-2 py-1 text-sm font-medium transition-colors ${currentPage === p ? "bg-blue-500 text-white shadow-sm dark:bg-blue-600" : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"}`,
           children: p
         },
         p
@@ -782,14 +751,14 @@ function ZestTable({
               value: searchText,
               onChange: (e) => setSearchText(e.target.value),
               placeholder: searchPlaceholder,
-              className: "rounded-lg border border-gray-200 bg-white pl-3 pr-7 py-1.5 text-sm text-gray-700 placeholder-gray-400 shadow-sm focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 w-52"
+              className: "rounded-lg border border-gray-200 bg-white pl-3 pr-7 py-1.5 text-sm text-gray-700 placeholder-gray-400 shadow-sm focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 w-52 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-500 dark:focus:border-blue-500 dark:focus:ring-blue-900/30"
             }
           ),
           searchText && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
             "button",
             {
               onClick: () => setSearchText(""),
-              className: "absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-base leading-none",
+              className: "absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-base leading-none dark:text-gray-500 dark:hover:text-gray-300",
               children: "\xD7"
             }
           )
@@ -798,15 +767,15 @@ function ZestTable({
           "button",
           {
             onClick: handleExportCsv,
-            className: "rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-600 shadow-sm hover:bg-gray-50 transition-colors",
+            className: "rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-600 shadow-sm hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700",
             children: "\u2193 Export CSV"
           }
         )
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900", children: [
       loading && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(TableSpinner, {}),
-      title && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "border-b border-gray-100 px-4 py-3 text-sm font-medium text-gray-700", children: title() }),
+      title && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "border-b border-gray-100 px-4 py-3 text-sm font-medium text-gray-700 dark:border-gray-800 dark:text-gray-200", children: title() }),
       /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
         "div",
         {
@@ -815,20 +784,20 @@ function ZestTable({
           children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
             "table",
             {
-              className: `w-full border-collapse ${bordered ? "border border-gray-200" : ""}`,
+              className: `w-full border-collapse ${bordered ? "border border-gray-200 dark:border-gray-700" : ""}`,
               style: tableStyle,
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("thead", { className: "sticky top-0 z-[1] bg-gray-50", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("tr", { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("thead", { className: "sticky top-0 z-[1] bg-gray-50 dark:bg-gray-800", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("tr", { children: [
                   hasExpand && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                     "th",
                     {
-                      className: `${cellPad} w-10 border-b border-gray-200 ${bordered ? "border-r border-gray-200" : ""}`
+                      className: `${cellPad} w-10 border-b border-gray-200 dark:border-gray-700 ${bordered ? "border-r border-gray-200 dark:border-gray-700" : ""}`
                     }
                   ),
                   hasSelect && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                     "th",
                     {
-                      className: `${cellPad} w-10 text-center border-b border-gray-200 ${bordered ? "border-r border-gray-200" : ""}`,
+                      className: `${cellPad} w-10 text-center border-b border-gray-200 dark:border-gray-700 ${bordered ? "border-r border-gray-200 dark:border-gray-700" : ""}`,
                       children: rowSelection?.type !== "radio" && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                         "input",
                         {
@@ -848,7 +817,7 @@ function ZestTable({
                     {
                       onClick: () => handleSort(col.key, col.sortable),
                       style: { width: col.width, textAlign: col.align ?? "left" },
-                      className: `border-b border-gray-200 ${cellPad} text-sm font-semibold text-gray-600 whitespace-nowrap select-none ${col.sortable ? "cursor-pointer hover:bg-gray-100 transition-colors" : ""} ${bordered ? "border-r border-gray-200 last:border-r-0" : ""}`,
+                      className: `border-b border-gray-200 dark:border-gray-700 ${cellPad} text-sm font-semibold text-gray-600 whitespace-nowrap select-none dark:text-gray-400 ${col.sortable ? "cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" : ""} ${bordered ? "border-r border-gray-200 dark:border-gray-700 last:border-r-0" : ""}`,
                       children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "relative flex items-center gap-1", children: [
                         /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { children: col.title }),
                         sortIcon(col.key, col.sortable),
@@ -861,7 +830,7 @@ function ZestTable({
                                 openFilterKey === col.key ? null : col.key
                               );
                             },
-                            className: `ml-auto text-xs rounded px-1 py-0.5 transition-colors ${activeFilters[col.key]?.length ? "text-blue-500 bg-blue-50" : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"}`,
+                            className: `ml-auto text-xs rounded px-1 py-0.5 transition-colors ${activeFilters[col.key]?.length ? "text-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400" : "text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-500 dark:hover:text-gray-300 dark:hover:bg-gray-700"}`,
                             children: "\u25BC"
                           }
                         ),
@@ -884,7 +853,7 @@ function ZestTable({
                   "td",
                   {
                     colSpan: columns.length + (hasSelect ? 1 : 0) + (hasExpand ? 1 : 0),
-                    className: "px-4 py-14 text-center text-sm text-gray-400",
+                    className: "px-4 py-14 text-center text-sm text-gray-400 dark:text-gray-500",
                     children: emptyText
                   }
                 ) }) : paginatedData.map((row, idx) => {
@@ -895,21 +864,21 @@ function ZestTable({
                   const rowProps = onRow?.(row, absoluteIdx);
                   const canExpand = hasExpand && (expandable.rowExpandable ? expandable.rowExpandable(row) : true);
                   const checkboxDisabled = rowSelection?.getCheckboxProps?.(row)?.disabled ?? false;
-                  let rowBg = "bg-white";
-                  if (isSelected) rowBg = "bg-blue-50";
-                  else if (striped && idx % 2 === 1) rowBg = "bg-gray-50/70";
+                  let rowBg = "bg-white dark:bg-gray-900";
+                  if (isSelected) rowBg = "bg-blue-50 dark:bg-blue-900/30";
+                  else if (striped && idx % 2 === 1) rowBg = "bg-gray-50/70 dark:bg-gray-800/50";
                   return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_react4.default.Fragment, { children: [
                     /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
                       "tr",
                       {
                         onClick: rowProps?.onClick,
                         onDoubleClick: rowProps?.onDoubleClick,
-                        className: `border-b border-gray-100 transition-colors ${rowBg} ${rowProps?.onClick ? "cursor-pointer" : ""} hover:bg-blue-50/40 ${rowProps?.className ?? ""}`,
+                        className: `border-b border-gray-100 transition-colors dark:border-gray-800 ${rowBg} ${rowProps?.onClick ? "cursor-pointer" : ""} hover:bg-blue-50/40 dark:hover:bg-blue-900/20 ${rowProps?.className ?? ""}`,
                         children: [
                           hasExpand && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                             "td",
                             {
-                              className: `${cellPad} text-center ${bordered ? "border-r border-gray-100" : ""}`,
+                              className: `${cellPad} text-center ${bordered ? "border-r border-gray-100 dark:border-gray-800" : ""}`,
                               children: canExpand && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                                 "button",
                                 {
@@ -922,7 +891,7 @@ function ZestTable({
                                     transition: "transform 0.15s",
                                     display: "inline-block"
                                   },
-                                  className: "text-gray-400 hover:text-gray-600 text-xs leading-none",
+                                  className: "text-gray-400 hover:text-gray-600 text-xs leading-none dark:text-gray-500 dark:hover:text-gray-300",
                                   children: "\u25B6"
                                 }
                               )
@@ -931,7 +900,7 @@ function ZestTable({
                           hasSelect && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                             "td",
                             {
-                              className: `${cellPad} text-center ${bordered ? "border-r border-gray-100" : ""}`,
+                              className: `${cellPad} text-center ${bordered ? "border-r border-gray-100 dark:border-gray-800" : ""}`,
                               children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                                 "input",
                                 {
@@ -954,7 +923,7 @@ function ZestTable({
                                   textAlign: col.align ?? "left",
                                   width: col.width
                                 },
-                                className: `${cellPad} text-sm text-gray-700 align-middle ${colIdx === 0 && !hasSelect ? "font-medium" : ""} ${col.ellipsis ? "max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" : "whitespace-nowrap"} ${bordered ? "border-r border-gray-100 last:border-r-0" : ""}`,
+                                className: `${cellPad} text-sm text-gray-700 align-middle dark:text-gray-200 ${colIdx === 0 && !hasSelect ? "font-medium" : ""} ${col.ellipsis ? "max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" : "whitespace-nowrap"} ${bordered ? "border-r border-gray-100 last:border-r-0 dark:border-gray-800" : ""}`,
                                 children: col.render ? col.render(value, row, absoluteIdx) : value
                               },
                               col.key
@@ -963,34 +932,34 @@ function ZestTable({
                         ]
                       }
                     ),
-                    hasExpand && isExpanded && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { className: "bg-gray-50", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                    hasExpand && isExpanded && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { className: "bg-gray-50 dark:bg-gray-800", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                       "td",
                       {
                         colSpan: columns.length + (hasSelect ? 1 : 0) + 1,
-                        className: `${cellPad} border-b border-gray-100`,
+                        className: `${cellPad} border-b border-gray-100 dark:border-gray-700 dark:text-gray-300`,
                         children: expandable.expandedRowRender(row, absoluteIdx)
                       }
                     ) })
                   ] }, key);
                 }) }),
-                summary && sortedData.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tfoot", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { className: "bg-gray-50 font-medium", children: summary(sortedData) }) })
+                summary && sortedData.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tfoot", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { className: "bg-gray-50 font-medium dark:bg-gray-800 dark:text-gray-200", children: summary(sortedData) }) })
               ]
             }
           )
         }
       ),
-      footer && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "border-t border-gray-100 px-4 py-2.5 text-sm text-gray-500", children: footer() })
+      footer && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "border-t border-gray-100 px-4 py-2.5 text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400", children: footer() })
     ] }),
     showPagination && sortedData.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "text-sm text-gray-500", children: paginationConfig?.showTotal ? paginationConfig.showTotal(sortedData.length, [startEntry, endEntry]) : /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "text-sm text-gray-500 dark:text-gray-400", children: paginationConfig?.showTotal ? paginationConfig.showTotal(sortedData.length, [startEntry, endEntry]) : /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
         "Showing",
         " ",
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "font-medium text-gray-700", children: startEntry }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "font-medium text-gray-700 dark:text-gray-200", children: startEntry }),
         " \u2013 ",
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "font-medium text-gray-700", children: endEntry }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "font-medium text-gray-700 dark:text-gray-200", children: endEntry }),
         " of",
         " ",
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "font-medium text-gray-700", children: sortedData.length }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "font-medium text-gray-700 dark:text-gray-200", children: sortedData.length }),
         " ",
         "entries",
         selectedKeys.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("span", { className: "ml-2 text-blue-500 font-medium", children: [
@@ -1008,7 +977,7 @@ function ZestTable({
               setActivePageSize(Number(e.target.value));
               setCurrentPage(1);
             },
-            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-100 mr-2",
+            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-100 mr-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:focus:ring-blue-900/30",
             children: pageSizeOptions.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("option", { value: opt, children: [
               opt,
               " / page"
@@ -1020,7 +989,7 @@ function ZestTable({
           {
             onClick: () => setCurrentPage(1),
             disabled: currentPage === 1,
-            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors",
+            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700",
             children: "\xAB"
           }
         ),
@@ -1029,7 +998,7 @@ function ZestTable({
           {
             onClick: () => setCurrentPage((p) => p - 1),
             disabled: currentPage === 1,
-            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors",
+            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700",
             children: "\u2039"
           }
         ),
@@ -1039,7 +1008,7 @@ function ZestTable({
           {
             onClick: () => setCurrentPage((p) => p + 1),
             disabled: currentPage === totalPages || totalPages === 0,
-            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors",
+            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700",
             children: "\u203A"
           }
         ),
@@ -1048,7 +1017,7 @@ function ZestTable({
           {
             onClick: () => setCurrentPage(totalPages),
             disabled: currentPage === totalPages || totalPages === 0,
-            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors",
+            className: "rounded border border-gray-200 bg-white px-2 py-1 text-sm text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700",
             children: "\xBB"
           }
         )
@@ -1069,26 +1038,17 @@ var ZestTabs = ({ tabNames, children, className = "" }) => {
     return () => clearTimeout(timeout);
   }, [active]);
   return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { className: "flex border-b mb-4 ", children: tabNames.map((name, idx) => /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { className: "flex border-b border-gray-200 mb-4 dark:border-gray-700", children: tabNames.map((name, idx) => /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
       "button",
       {
-        className: `px-4 py-2 -mb-px border-b-2 cursor-pointer transition-colors duration-200 focus:outline-none ${active === idx ? "border-blue-500 text-blue-600 font-semibold" : "border-transparent text-gray-500 hover:text-blue-500"}`,
+        className: `px-4 py-2 -mb-px border-b-2 cursor-pointer transition-colors duration-200 focus:outline-none text-sm font-medium ${active === idx ? "border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400" : "border-transparent text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"}`,
         onClick: () => setActive(idx),
         type: "button",
         children: name
       },
       name
     )) }),
-    /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
-      "div",
-      {
-        style: {
-          opacity: fade ? 1 : 0,
-          transition: "opacity 250ms"
-        },
-        children: children[active]
-      }
-    )
+    /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { style: { opacity: fade ? 1 : 0, transition: "opacity 250ms" }, children: children[active] })
   ] });
 };
 

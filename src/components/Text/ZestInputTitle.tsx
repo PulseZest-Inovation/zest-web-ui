@@ -16,7 +16,7 @@ export const ZestInputTitle: React.FC<ZestInputTitleProps> = ({
   return (
     <label
       htmlFor={htmlFor}
-      className={`w-40 text-sm font-medium text-primary ${className}`}
+      className={`w-40 text-sm font-medium text-gray-700 dark:text-gray-300 ${className}`}
     >
       {children}
       {required && <span className="text-red-500 ml-1">*</span>}

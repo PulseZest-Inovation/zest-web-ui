@@ -9,12 +9,9 @@ export function ZestIconButton({ icon, className = "", ...props }: ZestIconButto
   return (
     <button
       {...props}
-      className={`p-2 rounded-lg border hover:scale-105 transition ${className}`}
+      className={`p-2 rounded-lg border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 hover:scale-105 transition dark:border-gray-700 dark:text-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 ${className}`}
     >
       {icon}
     </button>
   );
 }
-
-// Usage:
-{/* <ZestIconButton icon={<TrashIcon />} /> */}

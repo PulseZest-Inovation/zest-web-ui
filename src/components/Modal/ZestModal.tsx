@@ -58,16 +58,12 @@ export const ZestModal: React.FC<ZestModalProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/40 ${overlayClassName}`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70 ${overlayClassName}`}
       onClick={onClose}
     >
       <div
-        className={`bg-primary rounded-lg shadow-lg w-full ${widthClass} ${className}`}
-        style={{
-          ...style,
-          maxWidth: "700px",
-          minWidth: "320px",
-        }}
+        className={`bg-white rounded-lg shadow-xl w-full border border-gray-200 dark:bg-gray-900 dark:border-gray-700 ${widthClass} ${className}`}
+        style={{ ...style, maxWidth: "700px", minWidth: "320px" }}
         onClick={(e) => e.stopPropagation()}
       >
         {children}
@@ -75,21 +71,3 @@ export const ZestModal: React.FC<ZestModalProps> = ({
     </div>
   );
 };
-
-// Usage: 
-// import { ZestModal } from "zest-web-ui";
-
-// export default function Page() {
-//   const [open, setOpen] = React.useState(false);
-
-//   return (
-//     <>
-//       <button onClick={() => setOpen(true)}>Open Modal</button>
-
-//       <ZestModal open={open} onClose={() => setOpen(false)}>
-//         <h2 className="text-lg font-bold">Hello</h2>
-//         <p>This is a modal</p>
-//       </ZestModal>
-//     </>
-//   );
-// }

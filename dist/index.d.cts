@@ -33,7 +33,7 @@ interface ZestTitleProps {
     className?: string;
     as?: "h1" | "h2" | "h3" | "h4";
 }
-declare function ZestTitle({ children, icon, className, as: Tag, }: ZestTitleProps): react_jsx_runtime.JSX.Element;
+declare function ZestTitle({ children, icon, className, as: Tag }: ZestTitleProps): react_jsx_runtime.JSX.Element;
 
 interface ZestInputTitleProps {
     htmlFor?: string;

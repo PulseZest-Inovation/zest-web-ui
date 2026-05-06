@@ -8,9 +8,9 @@ export interface ZestHeadingProps {
 
 export function ZestHeading({ children, level = 2, className = "" }: ZestHeadingProps) {
   const Tag = `h${level}` as keyof JSX.IntrinsicElements;
-
-  return <Tag className={`font-bold ${className}`}>{children}</Tag>;
+  return (
+    <Tag className={`font-bold text-gray-900 dark:text-gray-100 ${className}`}>
+      {children}
+    </Tag>
+  );
 }
-
-// Usage:
-{/* <ZestHeading level={1}>Dashboard</ZestHeading> */}

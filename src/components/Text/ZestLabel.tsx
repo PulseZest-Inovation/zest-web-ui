@@ -10,13 +10,9 @@ export function ZestLabel({ htmlFor, children, className = "" }: ZestLabelProps)
   return (
     <label
       htmlFor={htmlFor}
-      className={`text-sm font-medium text-primary ${className}`}
+      className={`text-sm font-medium text-gray-700 dark:text-gray-300 ${className}`}
     >
       {children}
     </label>
   );
 }
-
-//Usage: 
-{/* <ZestLabel htmlFor="email">Email</ZestLabel>
-<ZestInput id="email" /> */}

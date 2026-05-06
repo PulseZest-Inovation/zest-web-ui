@@ -1,8 +1,8 @@
 'use client';
 import React from "react";
 
-
 type AlertType = "success" | "error" | "warning" | "info";
+
 interface AlertState {
   open: boolean;
   type: AlertType;
@@ -58,41 +58,25 @@ export function useAlert() {
   return ctx;
 }
 
-const ZestAlertGlobal: React.FC<AlertState> = ({ open, type, message, duration }) => {
+const typeStyles: Record<AlertType, string> = {
+  success:
+    "bg-green-100 text-green-800 border-green-400 dark:bg-green-900/40 dark:text-green-300 dark:border-green-700",
+  error:
+    "bg-red-100 text-red-800 border-red-400 dark:bg-red-900/40 dark:text-red-300 dark:border-red-700",
+  warning:
+    "bg-yellow-100 text-yellow-800 border-yellow-400 dark:bg-yellow-900/40 dark:text-yellow-300 dark:border-yellow-600",
+  info:
+    "bg-blue-100 text-blue-800 border-blue-400 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-700",
+};
+
+const ZestAlertGlobal: React.FC<AlertState> = ({ open, type, message }) => {
   if (!open || !message) return null;
-  const typeStyles: Record<string, string> = {
-    success: "bg-green-100 text-green-700 border-green-400",
-    error: "bg-red-100 text-red-700 border-red-400",
-    warning: "bg-yellow-100 text-yellow-700 border-yellow-400",
-    info: "bg-blue-100 text-blue-700 border-blue-400",
-  };
+
   return (
     <div
-      className={`fixed top-0 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-fit px-4 py-2 rounded-lg border-2 shadow-lg transition-all duration-300 ${typeStyles[type]}`}
-      style={{
-        pointerEvents: 'auto',
-        background: '#fffbe6', // fallback for visibility
-        color: '#222',
-        border: '2px solid #facc15'
-      }}
+      className={`fixed top-4 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-fit px-4 py-2.5 rounded-lg border-2 shadow-lg text-sm font-medium transition-all duration-300 ${typeStyles[type]}`}
     >
       {message}
     </div>
   );
 };
-
-
-
-// Usage:
-// import { useAlert } from "../components/Alert/AlertProivder";
-
-// function MyComponent() {
-//   const { showAlert } = useAlert();
-
-//   async function handleSave() {
-//     // ...kuch logic...
-//     showAlert({ type: "success", message: "Data saved!", duration: 3000 });
-//   }
-
-//   return <button onClick={handleSave}>Save</button>;
-// }
